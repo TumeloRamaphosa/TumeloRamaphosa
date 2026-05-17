@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 
 export function Nav({
   links,
-  brand = "LAISA",
+  brand = "StudEx Ai OS",
   cta = { label: "Book a walkthrough", href: "#contact" },
 }: {
   links: { label: string; href: string }[];

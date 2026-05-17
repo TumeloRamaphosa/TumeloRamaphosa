@@ -2,14 +2,22 @@ import { z } from "zod";
 import { protectedProcedure, publicProcedure, router } from "../_core/trpc";
 import { TRPCError } from "@trpc/server";
 
-const COMPOSIO_API_KEY = process.env.COMPOSIO_API_KEY || "ak_EBdmBPesM68NJ3DmT6D9";
+const COMPOSIO_API_KEY = process.env.COMPOSIO_API_KEY;
 const COMPOSIO_BASE = "https://backend.composio.dev/api/v1";
 
 async function composioFetch(path: string, options: RequestInit = {}) {
+  if (!COMPOSIO_API_KEY) {
+    throw new TRPCError({
+      code: "PRECONDITION_FAILED",
+      message:
+        "Composio is not configured. Set the COMPOSIO_API_KEY environment variable to connect client assets.",
+    });
+  }
+  const apiKey: string = COMPOSIO_API_KEY;
   const res = await fetch(`${COMPOSIO_BASE}${path}`, {
     ...options,
     headers: {
-      "x-api-key": COMPOSIO_API_KEY,
+      "x-api-key": apiKey,
       "Content-Type": "application/json",
       Accept: "application/json",
       ...(options.headers || {}),
@@ -121,6 +129,7 @@ export const composioRouter = router({
   getActions: protectedProcedure
     .input(z.object({ appName: z.string() }))
     .query(async ({ input }) => {
+      if (!COMPOSIO_API_KEY) return { items: [], total: 0 };
       // Use the newer v2 endpoint
       const res = await fetch(`https://backend.composio.dev/api/v2/actions?appNames=${input.appName}&limit=50`, {
         headers: {

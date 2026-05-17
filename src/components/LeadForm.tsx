@@ -55,7 +55,7 @@ export function LeadForm({ source = "laisa" }: { source?: string }) {
       <textarea
         name="message"
         rows={3}
-        placeholder="What would you like LAISA to run for you?"
+        placeholder="What would you like StudEx Ai OS to run for you?"
         className="flex w-full rounded-xl border border-line bg-ink-2/70 px-4 py-3 text-[15px] text-text placeholder:text-muted/70 focus:border-violet/50 focus:outline-none focus:ring-2 focus:ring-violet/30 transition-all"
       />
       <Button type="submit" size="lg" disabled={state === "loading"}>
@@ -65,7 +65,7 @@ export function LeadForm({ source = "laisa" }: { source?: string }) {
         <p className="text-sm text-red-400">{message}</p>
       )}
       <p className="text-xs text-muted">
-        We only use your details to contact you about LAISA. No spam, ever.
+        We only use your details to contact you about StudEx Ai OS. No spam, ever.
       </p>
     </form>
   );

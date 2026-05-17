@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { RoiPanel } from "@/components/RoiPanel";
+import { GoodXPanel } from "@/components/GoodXPanel";
+import { BriefingsPanel, type Briefing } from "@/components/BriefingsPanel";
 import { BRANDS } from "@/lib/brand";
+
+// Add your NotebookLM video links here (YouTube / Google Drive / .mp4).
+const SAFESIGHT_BRIEFINGS: Briefing[] = [];
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -282,6 +287,8 @@ export default function SafesightPortal() {
               { value: "audience", label: "Audience", icon: Users },
               { value: "ai", label: "AI Insights", icon: Brain },
               { value: "roi", label: "ROI & Cost", icon: DollarSign },
+              { value: "payments", label: "Payments", icon: Activity },
+              { value: "briefings", label: "Briefings", icon: Sparkles },
             ].map(t => (
               <TabsTrigger key={t.value} value={t.value} className="text-xs data-[state=active]:text-white" style={{ color: "#8aa0c0" }}>
                 <t.icon className="w-3 h-3 mr-1" />{t.label}
@@ -577,6 +584,16 @@ export default function SafesightPortal() {
           {/* ── ROI & Cost tab ───────────────────────────────────────────── */}
           <TabsContent value="roi" className="space-y-4">
             <RoiPanel brand={BRANDS.safesight} />
+          </TabsContent>
+
+          {/* ── Payments / GoodX tab ─────────────────────────────────────── */}
+          <TabsContent value="payments" className="space-y-4">
+            <GoodXPanel brand={BRANDS.safesight} />
+          </TabsContent>
+
+          {/* ── Briefings tab ────────────────────────────────────────────── */}
+          <TabsContent value="briefings" className="space-y-4">
+            <BriefingsPanel brand={BRANDS.safesight} briefings={SAFESIGHT_BRIEFINGS} />
           </TabsContent>
         </Tabs>
       </div>

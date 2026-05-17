@@ -270,20 +270,20 @@ export default function SafeSight() {
         </div>
       </section>
 
-      {/* POWERED BY LAISA */}
+      {/* POWERED BY StudEx Ai OS */}
       <section className="border-y border-line bg-ink-2 px-6 py-16">
         <div className="mx-auto flex max-w-4xl flex-col items-center gap-4 text-center">
           <Reveal>
             <p className="text-muted">
               SafeSight is powered by{" "}
-              <span className="font-semibold text-text">LAISA</span> — the
+              <span className="font-semibold text-text">StudEx Ai OS</span> — the
               agent-run operating system behind it.
             </p>
           </Reveal>
           <Reveal delay={0.05}>
             <Link href="/">
               <Button variant="ghost" size="sm">
-                <ArrowLeft className="h-4 w-4" /> Learn about LAISA
+                <ArrowLeft className="h-4 w-4" /> Learn about StudEx Ai OS
               </Button>
             </Link>
           </Reveal>

@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "LAISA — Your business, on autopilot",
+  title: "StudEx Ai OS — Your business, on autopilot",
   description:
-    "LAISA is an agent-run operating system for your business. It unifies WhatsApp, email, payments, billing, social and content into one dashboard — and gets smarter every week.",
+    "StudEx Ai OS is an agent-run operating system for your business. It unifies WhatsApp, email, payments, billing, social and content into one dashboard — and gets smarter every week.",
   keywords: [
     "AI agents",
     "business operating system",
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     "SafeSight",
   ],
   openGraph: {
-    title: "LAISA — Your business, on autopilot",
+    title: "StudEx Ai OS — Your business, on autopilot",
     description:
       "An operating system, staffed by agents that work 24/7 and get smarter every week.",
     type: "website",

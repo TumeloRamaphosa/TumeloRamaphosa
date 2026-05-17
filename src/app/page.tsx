@@ -85,7 +85,7 @@ export default function Home() {
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mx-auto mt-7 max-w-2xl text-lg text-muted md:text-xl">
-              LAISA is not another app or dashboard on top of your other
+              StudEx Ai OS is not another app or dashboard on top of your other
               dashboards. It is an operating system, run by AI agents that work
               for you 24/7 — and get smarter every single week.
             </p>
@@ -133,7 +133,7 @@ export default function Home() {
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mt-6 text-2xl font-bold md:text-3xl">
-              LAISA flips that ratio.
+              StudEx Ai OS flips that ratio.
             </p>
           </Reveal>
         </div>
@@ -324,10 +324,10 @@ export default function Home() {
                 Flagship client
               </p>
               <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl">
-                SafeSight runs on LAISA
+                SafeSight runs on StudEx Ai OS
               </h2>
               <p className="mx-auto mt-4 max-w-2xl text-lg text-muted">
-                SafeSight is the first business operating fully inside LAISA — a
+                SafeSight is the first business operating fully inside StudEx Ai OS — a
                 live proof that one infrastructure can run an entire operation
                 end to end, from first patient contact to reconciled books.
               </p>
@@ -396,7 +396,7 @@ export default function Home() {
               Welcome to your business, on autopilot.
             </h2>
             <p className="mx-auto mt-4 max-w-lg text-muted">
-              Book a walkthrough and we&apos;ll show you LAISA running a real
+              Book a walkthrough and we&apos;ll show you StudEx Ai OS running a real
               operation, live.
             </p>
           </Reveal>

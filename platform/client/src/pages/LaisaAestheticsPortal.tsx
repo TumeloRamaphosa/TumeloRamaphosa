@@ -22,8 +22,13 @@ import {
 } from "recharts";
 import { BRANDS } from "@/lib/brand";
 import { RoiPanel } from "@/components/RoiPanel";
+import { GoodXPanel } from "@/components/GoodXPanel";
+import { BriefingsPanel, type Briefing } from "@/components/BriefingsPanel";
 
 const B = BRANDS.laisa;
+
+// Add your NotebookLM video links here (YouTube / Google Drive / .mp4).
+const LAISA_BRIEFINGS: Briefing[] = [];
 
 // Demo performance series — replaced by live data from facebookAds /
 // clientPortal / Composio once the clinic's accounts are connected.
@@ -157,6 +162,12 @@ export default function LaisaAestheticsPortal() {
 
         {/* ROI / time-money-token */}
         <RoiPanel brand={B} />
+
+        {/* Payments & medical aid (GoodX) */}
+        <GoodXPanel brand={B} />
+
+        {/* NotebookLM briefings */}
+        <BriefingsPanel brand={B} briefings={LAISA_BRIEFINGS} />
 
         {/* Connect & agent surfaces */}
         <div>
