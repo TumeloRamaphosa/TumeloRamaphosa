@@ -8,9 +8,11 @@ export function Footer() {
           <span className="text-teal">◐</span> StudEx Ai OS
         </span>
         <span>An agent-run operating system. Built in South Africa, for the world.</span>
-        <div className="flex gap-5">
+        <div className="flex flex-wrap gap-5">
           <Link href="/" className="hover:text-text">StudEx Ai OS</Link>
           <Link href="/safesight" className="hover:text-text">SafeSight</Link>
+          <Link href="/demo/safesight" className="hover:text-text">SafeSight demo</Link>
+          <Link href="/demo/laisa" className="hover:text-text">LAISA demo</Link>
         </div>
       </div>
     </footer>
