@@ -1,0 +1,48 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1775491569072,
+      "tag": "0000_perfect_selene",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1775493490614,
+      "tag": "0001_lush_prowler",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1775599015000,
+      "tag": "0002_known_quasimodo",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1775760022139,
+      "tag": "0003_outgoing_sally_floyd",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1775764123629,
+      "tag": "0004_acoustic_northstar",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1778953730884,
+      "tag": "0005_jittery_patch",
+      "breakpoints": true
+    }
+  ]
+}
