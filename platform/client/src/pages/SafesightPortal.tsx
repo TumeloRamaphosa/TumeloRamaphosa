@@ -6,7 +6,18 @@ import { BriefingsPanel, type Briefing } from "@/components/BriefingsPanel";
 import { BRANDS } from "@/lib/brand";
 
 // Add your NotebookLM video links here (YouTube / Google Drive / .mp4).
-const SAFESIGHT_BRIEFINGS: Briefing[] = [];
+const SAFESIGHT_BRIEFINGS: Briefing[] = [
+  {
+    title: "Before — the clinic today",
+    url: "https://notebooklm.google.com/notebook/95d125bd-e185-42ce-ae56-825c118baea4/artifact/c50138fc-00b0-4d1a-b375-d318a87f82ca",
+    note: "Walkthrough of the current manual operation.",
+  },
+  {
+    title: "After — with StudEx Ai OS",
+    url: "https://notebooklm.google.com/notebook/95d125bd-e185-42ce-ae56-825c118baea4/artifact/e39309c9-1345-4ab0-9916-4d53cfd5a374",
+    note: "The same operation, agent-run.",
+  },
+];
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

@@ -1,14 +1,19 @@
-import { PlayCircle, Film } from "lucide-react";
+import { PlayCircle, Film, ExternalLink } from "lucide-react";
 import type { Brand } from "@/lib/brand";
 
 export type Briefing = { title: string; url: string; note?: string };
 
-// Turn a share link into an embeddable URL.
-function embedSrc(url: string): { kind: "iframe" | "video"; src: string } {
+// Resolve a share link to an embed. NotebookLM artifact links are
+// auth-gated and frame-blocked, so they render as a click-out card
+// instead of a broken iframe. Unknown hosts also fall back to a card.
+function resolve(
+  url: string
+): { kind: "iframe" | "video" | "link"; src: string } {
   const yt = url.match(
     /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/
   );
-  if (yt) return { kind: "iframe", src: `https://www.youtube.com/embed/${yt[1]}` };
+  if (yt)
+    return { kind: "iframe", src: `https://www.youtube.com/embed/${yt[1]}` };
 
   const drive = url.match(/drive\.google\.com\/file\/d\/([\w-]+)/);
   if (drive)
@@ -19,7 +24,7 @@ function embedSrc(url: string): { kind: "iframe" | "video"; src: string } {
 
   if (/\.(mp4|webm|mov)(\?|$)/i.test(url)) return { kind: "video", src: url };
 
-  return { kind: "iframe", src: url };
+  return { kind: "link", src: url };
 }
 
 export function BriefingsPanel({
@@ -38,8 +43,8 @@ export function BriefingsPanel({
           Briefings &amp; updates
         </h3>
         <p className="text-xs" style={{ color: brand.muted }}>
-          NotebookLM video overviews — strategy, performance &amp; what the
-          agents did this week
+          NotebookLM video overviews — before &amp; after, and what the agents
+          did this week
         </p>
       </div>
 
@@ -50,14 +55,13 @@ export function BriefingsPanel({
         >
           <Film className="w-8 h-8" style={{ color: brand.muted }} />
           <p className="text-sm" style={{ color: brand.muted }}>
-            No briefings added yet. Drop in your NotebookLM video links
-            (YouTube, Google Drive, or a direct .mp4) and they appear here.
+            No briefings added yet.
           </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
           {briefings.map((b, i) => {
-            const e = embedSrc(b.url);
+            const e = resolve(b.url);
             return (
               <div key={i} style={tile} className="rounded-xl p-4">
                 <div className="flex items-center gap-2 mb-3">
@@ -72,18 +76,50 @@ export function BriefingsPanel({
                     {b.title}
                   </span>
                 </div>
-                <div
-                  className="rounded-lg overflow-hidden"
-                  style={{ aspectRatio: "16 / 9", background: brand.bg }}
-                >
-                  {e.kind === "video" ? (
-                    <video
-                      src={e.src}
-                      controls
-                      className="w-full h-full"
-                      style={{ background: "#000" }}
+
+                {e.kind === "link" ? (
+                  <a
+                    href={e.src}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-lg flex flex-col items-center justify-center gap-3 text-center px-4"
+                    style={{
+                      aspectRatio: "16 / 9",
+                      background: brand.bg,
+                      border: `1px dashed ${brand.border}`,
+                    }}
+                  >
+                    <PlayCircle
+                      className="w-10 h-10"
+                      style={{ color: brand.accent }}
                     />
-                  ) : (
+                    <span
+                      className="text-sm font-semibold flex items-center gap-1.5"
+                      style={{ color: brand.primary }}
+                    >
+                      Open briefing in NotebookLM
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </span>
+                    <span
+                      className="text-[11px]"
+                      style={{ color: brand.muted }}
+                    >
+                      Requires Google access. Host on YouTube/Drive for inline
+                      client playback.
+                    </span>
+                  </a>
+                ) : e.kind === "video" ? (
+                  <video
+                    src={e.src}
+                    controls
+                    className="w-full rounded-lg"
+                    style={{ aspectRatio: "16 / 9", background: "#000" }}
+                  />
+                ) : (
+                  <div
+                    className="rounded-lg overflow-hidden"
+                    style={{ aspectRatio: "16 / 9", background: brand.bg }}
+                  >
                     <iframe
                       src={e.src}
                       title={b.title}
@@ -91,13 +127,11 @@ export function BriefingsPanel({
                       allowFullScreen
                       className="w-full h-full border-0"
                     />
-                  )}
-                </div>
+                  </div>
+                )}
+
                 {b.note && (
-                  <p
-                    className="text-xs mt-2"
-                    style={{ color: brand.muted }}
-                  >
+                  <p className="text-xs mt-2" style={{ color: brand.muted }}>
                     {b.note}
                   </p>
                 )}
