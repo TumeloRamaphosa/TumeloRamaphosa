@@ -27,17 +27,17 @@ export function Nav({
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-300",
         scrolled
-          ? "border-b border-line bg-ink/85 backdrop-blur-xl"
+          ? "border-b border-line bg-paper/85 backdrop-blur-xl"
           : "border-b border-transparent"
       )}
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-6 px-6">
-        <Link href="/" className="flex items-center gap-2 text-lg font-extrabold tracking-tight font-display">
-          <span className="text-teal">◐</span> {brand}
+        <Link href="/" className="flex items-center gap-2.5 text-lg font-semibold tracking-tight font-display">
+          <span className="handled-dot" /> {brand}
         </Link>
         <nav className="ml-auto hidden gap-8 text-sm text-muted md:flex">
           {links.map((l) => (
-            <a key={l.href} href={l.href} className="transition-colors hover:text-text">
+            <a key={l.href} href={l.href} className="transition-colors hover:text-ink">
               {l.label}
             </a>
           ))}

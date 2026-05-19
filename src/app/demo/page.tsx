@@ -68,19 +68,24 @@ export default function LaisaDashboard() {
   const [unit, setUnit] = useState<Unit>("all");
 
   return (
-    <div style={{ background: B.bg, minHeight: "100vh", color: B.text }}>
+    <div
+      className="dark"
+      style={{ background: B.bg, minHeight: "100vh", color: B.text }}
+    >
       {/* Top bar */}
       <header
         className="sticky top-0 z-40 backdrop-blur-xl"
         style={{
-          background: "rgba(7,11,16,.8)",
+          background: "rgba(22,20,15,.85)",
           borderBottom: `1px solid ${B.border}`,
         }}
       >
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <span style={{ color: B.accent }} className="text-2xl">◐</span>
-            <span className="font-extrabold text-xl tracking-tight">LAISA</span>
+          <div className="flex items-center gap-2.5">
+            <span className="handled-dot" />
+            <span className="font-display font-semibold text-xl tracking-tight">
+              LAISA
+            </span>
           </div>
           <span
             className="hidden md:block text-xs"
@@ -103,7 +108,7 @@ export default function LaisaDashboard() {
                 className="text-xs font-semibold px-3 py-1.5 rounded-full transition-colors"
                 style={{
                   background: unit === u.key ? B.primary : "transparent",
-                  color: unit === u.key ? B.bg : B.muted,
+                  color: unit === u.key ? B.text : B.muted,
                 }}
               >
                 {u.label}
@@ -113,21 +118,16 @@ export default function LaisaDashboard() {
         </div>
       </header>
 
-      {/* Cinematic hero */}
-      <section className="relative overflow-hidden">
-        <div
-          className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 h-[520px] w-[900px] rounded-full blur-[150px]"
-          style={{ background: `${B.primary}26` }}
-        />
-        <div
-          className="pointer-events-none absolute -top-10 right-10 h-[320px] w-[320px] rounded-full blur-[130px]"
-          style={{ background: `${B.accent}22` }}
-        />
-        <div className="relative max-w-7xl mx-auto px-6 pt-12 pb-6">
-          <p className="text-xs font-bold uppercase tracking-[0.25em]" style={{ color: B.accent }}>
-            One operating system · all your data
+      {/* Hero */}
+      <section>
+        <div className="max-w-7xl mx-auto px-6 pt-12 pb-6">
+          <p
+            className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.25em]"
+            style={{ color: B.muted }}
+          >
+            <span className="handled-dot" /> One operating system · all your data
           </p>
-          <h1 className="mt-3 text-4xl md:text-5xl font-extrabold tracking-tight">
+          <h1 className="mt-3 font-display text-4xl md:text-5xl font-semibold tracking-tight">
             The clinic, running itself.
           </h1>
           <p className="mt-3 max-w-2xl" style={{ color: B.muted }}>
@@ -235,7 +235,7 @@ export default function LaisaDashboard() {
 
       {/* Chat dock */}
       <div className="sticky bottom-0 w-full backdrop-blur-xl"
-        style={{ background: "rgba(7,11,16,.85)", borderTop: `1px solid ${B.border}` }}>
+        style={{ background: "rgba(22,20,15,.9)", borderTop: `1px solid ${B.border}` }}>
         <div className="max-w-7xl mx-auto px-6 py-3 flex items-center gap-3">
           <Sparkles className="w-5 h-5 shrink-0" style={{ color: B.accent }} />
           <input
@@ -243,8 +243,8 @@ export default function LaisaDashboard() {
             className="flex-1 bg-transparent text-sm outline-none"
             style={{ color: B.text }}
           />
-          <button className="text-xs font-semibold px-4 py-2 rounded-full"
-            style={{ background: B.primary, color: B.bg }}>
+          <button className="text-xs font-semibold px-4 py-2 rounded-[8px]"
+            style={{ background: B.primary, color: B.text }}>
             Send
           </button>
         </div>

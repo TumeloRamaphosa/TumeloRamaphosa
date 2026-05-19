@@ -68,30 +68,30 @@ export default function Home() {
       <Nav links={NAV} />
 
       {/* HERO */}
-      <section className="relative overflow-hidden px-6 pt-40 pb-28 text-center">
-        <div className="bg-grid pointer-events-none absolute inset-0 opacity-60" />
-        <div className="pointer-events-none absolute -top-40 left-1/2 h-[560px] w-[900px] -translate-x-1/2 rounded-full bg-violet/20 blur-[140px] animate-aurora" />
-        <div className="pointer-events-none absolute -top-20 right-10 h-[380px] w-[380px] rounded-full bg-teal/15 blur-[120px] animate-aurora" />
-        <div className="relative mx-auto max-w-4xl">
+      <section className="px-6 pt-40 pb-28">
+        <div className="mx-auto max-w-5xl">
           <Reveal>
-            <Badge>An agent-run operating system for your business</Badge>
+            <Badge>
+              <span className="handled-dot" /> An agent-run operating system for
+              your business
+            </Badge>
           </Reveal>
           <Reveal delay={0.05}>
-            <h1 className="mt-7 font-display text-5xl font-extrabold leading-[1.05] tracking-tight md:text-7xl">
+            <h1 className="mt-7 max-w-4xl font-display text-5xl font-semibold leading-[1.06] tracking-tight md:text-7xl">
               Your business has a computer now.
               <br />
-              <span className="text-gradient">And it runs itself.</span>
+              <span className="text-primary">And it runs itself.</span>
             </h1>
           </Reveal>
           <Reveal delay={0.1}>
-            <p className="mx-auto mt-7 max-w-2xl text-lg text-muted md:text-xl">
+            <p className="mt-7 max-w-2xl text-lg text-muted md:text-xl">
               StudEx Ai OS is not another app or dashboard on top of your other
               dashboards. It is an operating system, run by AI agents that work
               for you 24/7 — and get smarter every single week.
             </p>
           </Reveal>
           <Reveal delay={0.15}>
-            <div className="mt-9 flex flex-wrap justify-center gap-4">
+            <div className="mt-9 flex flex-wrap gap-4">
               <a href="#contact">
                 <Button size="lg">
                   Book a walkthrough <ArrowRight className="h-4 w-4" />
@@ -119,8 +119,8 @@ export default function Home() {
           <Reveal>
             <h2 className="font-display text-3xl font-bold md:text-4xl">
               How much of your week is spent{" "}
-              <span className="text-teal">running</span> your business — versus{" "}
-              <span className="text-teal">reacting</span> to it?
+              <span className="text-signal">running</span> your business — versus{" "}
+              <span className="text-signal">reacting</span> to it?
             </h2>
           </Reveal>
           <Reveal delay={0.05}>
@@ -143,7 +143,7 @@ export default function Home() {
       <section id="what" className="px-6 py-24">
         <div className="mx-auto max-w-6xl">
           <Reveal>
-            <p className="text-sm font-bold uppercase tracking-[0.2em] text-teal">
+            <p className="text-sm font-bold uppercase tracking-[0.2em] text-signal">
               What it is
             </p>
             <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl">
@@ -159,7 +159,7 @@ export default function Home() {
             {PILLARS.map((p, i) => (
               <Reveal key={p.title} delay={i * 0.07}>
                 <Card className="h-full">
-                  <p.icon className="h-7 w-7 text-violet" />
+                  <p.icon className="h-7 w-7 text-primary" />
                   <h3 className="mt-5 text-xl font-semibold">{p.title}</h3>
                   <p className="mt-3 text-[15px] text-muted">{p.body}</p>
                 </Card>
@@ -173,7 +173,7 @@ export default function Home() {
       <section id="unify" className="border-y border-line bg-ink-2 px-6 py-24">
         <div className="mx-auto max-w-6xl">
           <Reveal>
-            <p className="text-sm font-bold uppercase tracking-[0.2em] text-teal">
+            <p className="text-sm font-bold uppercase tracking-[0.2em] text-signal">
               What it runs
             </p>
             <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl">
@@ -189,7 +189,7 @@ export default function Home() {
             {CHANNELS.map((c, i) => (
               <Reveal key={c.label} delay={i * 0.03}>
                 <div className="flex items-center gap-2.5 rounded-full border border-line bg-surface/60 px-5 py-3 text-[15px]">
-                  <c.icon className="h-4 w-4 text-teal" />
+                  <c.icon className="h-4 w-4 text-signal" />
                   {c.label}
                 </div>
               </Reveal>
@@ -202,7 +202,7 @@ export default function Home() {
       <section id="systems" className="px-6 py-24">
         <div className="mx-auto max-w-6xl">
           <Reveal>
-            <p className="text-sm font-bold uppercase tracking-[0.2em] text-teal">
+            <p className="text-sm font-bold uppercase tracking-[0.2em] text-signal">
               The two operating systems
             </p>
             <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl">
@@ -213,7 +213,7 @@ export default function Home() {
             <Reveal>
               <Card className="h-full">
                 <h3 className="text-xl font-semibold">Operations OS</h3>
-                <p className="mt-1 font-medium text-teal">
+                <p className="mt-1 font-medium text-signal">
                   Your back office, handled.
                 </p>
                 <ul className="mt-5 space-y-3 text-[15px] text-muted">
@@ -225,7 +225,7 @@ export default function Home() {
                     "Clean books handed to your accountant monthly",
                   ].map((x) => (
                     <li key={x} className="flex gap-3">
-                      <span className="text-violet">→</span>
+                      <span className="text-primary">→</span>
                       {x}
                     </li>
                   ))}
@@ -235,7 +235,7 @@ export default function Home() {
             <Reveal delay={0.07}>
               <Card className="h-full">
                 <h3 className="text-xl font-semibold">Customer Experience OS</h3>
-                <p className="mt-1 font-medium text-teal">
+                <p className="mt-1 font-medium text-signal">
                   Every touchpoint with the people who pay you.
                 </p>
                 <ul className="mt-5 space-y-3 text-[15px] text-muted">
@@ -247,7 +247,7 @@ export default function Home() {
                     "Website chat that converts",
                   ].map((x) => (
                     <li key={x} className="flex gap-3">
-                      <span className="text-violet">→</span>
+                      <span className="text-primary">→</span>
                       {x}
                     </li>
                   ))}
@@ -267,7 +267,7 @@ export default function Home() {
       <section id="value" className="border-y border-line bg-ink-2 px-6 py-24">
         <div className="mx-auto max-w-6xl">
           <Reveal>
-            <p className="text-sm font-bold uppercase tracking-[0.2em] text-teal">
+            <p className="text-sm font-bold uppercase tracking-[0.2em] text-signal">
               Time &amp; money
             </p>
             <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl">
@@ -277,8 +277,8 @@ export default function Home() {
           <div className="mt-10 grid gap-5 md:grid-cols-2">
             <Reveal>
               <Card className="h-full">
-                <Clock className="h-7 w-7 text-violet" />
-                <p className="mt-5 text-4xl font-extrabold text-gradient">
+                <Clock className="h-7 w-7 text-primary" />
+                <p className="mt-5 text-4xl font-extrabold text-primary">
                   15–20 hrs / week
                 </p>
                 <h3 className="mt-3 text-xl font-semibold">Time, returned</h3>
@@ -292,8 +292,8 @@ export default function Home() {
             </Reveal>
             <Reveal delay={0.07}>
               <Card className="h-full">
-                <Banknote className="h-7 w-7 text-violet" />
-                <p className="mt-5 text-4xl font-extrabold text-gradient">
+                <Banknote className="h-7 w-7 text-primary" />
+                <p className="mt-5 text-4xl font-extrabold text-primary">
                   3 ways money shows up
                 </p>
                 <h3 className="mt-3 text-xl font-semibold">Money, unlocked</h3>
@@ -320,7 +320,7 @@ export default function Home() {
         <div className="mx-auto max-w-4xl">
           <Reveal>
             <Card className="text-center">
-              <p className="text-sm font-bold uppercase tracking-[0.2em] text-teal">
+              <p className="text-sm font-bold uppercase tracking-[0.2em] text-signal">
                 Flagship client
               </p>
               <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl">
@@ -345,7 +345,7 @@ export default function Home() {
       <section className="border-y border-line bg-ink-2 px-6 py-24">
         <div className="mx-auto max-w-6xl">
           <Reveal>
-            <p className="text-sm font-bold uppercase tracking-[0.2em] text-teal">
+            <p className="text-sm font-bold uppercase tracking-[0.2em] text-signal">
               Onboarding
             </p>
             <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl">
@@ -372,7 +372,7 @@ export default function Home() {
             ].map((s, i) => (
               <Reveal key={s.n} delay={i * 0.07}>
                 <Card className="h-full">
-                  <span className="font-display text-sm font-extrabold text-teal">
+                  <span className="font-display text-sm font-extrabold text-signal">
                     {s.n}
                   </span>
                   <h3 className="mt-3 text-xl font-semibold">{s.t}</h3>
@@ -385,12 +385,8 @@ export default function Home() {
       </section>
 
       {/* CONTACT / CTA */}
-      <section
-        id="contact"
-        className="relative overflow-hidden px-6 py-28 text-center"
-      >
-        <div className="pointer-events-none absolute left-1/2 top-1/2 h-[460px] w-[760px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet/15 blur-[140px]" />
-        <div className="relative mx-auto max-w-2xl">
+      <section id="contact" className="px-6 py-28 text-center">
+        <div className="mx-auto max-w-2xl">
           <Reveal>
             <h2 className="font-display text-4xl font-extrabold md:text-5xl">
               Welcome to your business, on autopilot.

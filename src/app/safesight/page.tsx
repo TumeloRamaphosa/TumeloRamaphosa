@@ -69,34 +69,32 @@ export default function SafeSight() {
       />
 
       {/* HERO */}
-      <section className="relative overflow-hidden px-6 pt-40 pb-28 text-center">
-        <div className="bg-grid pointer-events-none absolute inset-0 opacity-60" />
-        <div className="pointer-events-none absolute -top-40 left-1/2 h-[560px] w-[900px] -translate-x-1/2 rounded-full bg-teal/20 blur-[140px] animate-aurora" />
-        <div className="relative mx-auto max-w-4xl">
+      <section className="px-6 pt-40 pb-28">
+        <div className="mx-auto max-w-5xl">
           <Reveal>
             <Badge>
-              <HeartPulse className="h-3.5 w-3.5 text-teal" /> An operating
+              <HeartPulse className="h-3.5 w-3.5 text-signal" /> An operating
               system for your medical practice
             </Badge>
           </Reveal>
           <Reveal delay={0.05}>
-            <h1 className="mt-7 font-display text-5xl font-extrabold leading-[1.05] tracking-tight md:text-7xl">
+            <h1 className="mt-7 max-w-4xl font-display text-5xl font-semibold leading-[1.06] tracking-tight md:text-7xl">
               Your practice, running itself —
               <br />
-              <span className="text-gradient">
+              <span className="text-primary">
                 so you can focus on patients.
               </span>
             </h1>
           </Reveal>
           <Reveal delay={0.1}>
-            <p className="mx-auto mt-7 max-w-2xl text-lg text-muted md:text-xl">
+            <p className="mt-7 max-w-2xl text-lg text-muted md:text-xl">
               SafeSight is your front desk, billing clerk and marketing team —
               running 24/7 as AI agents. Bookings, reminders, claims and patient
               communication, handled. You and your staff get your time back.
             </p>
           </Reveal>
           <Reveal delay={0.15}>
-            <div className="mt-9 flex flex-wrap justify-center gap-4">
+            <div className="mt-9 flex flex-wrap gap-4">
               <a href="#contact">
                 <Button size="lg">
                   Request a demo <ArrowRight className="h-4 w-4" />
@@ -143,7 +141,7 @@ export default function SafeSight() {
       <section id="does" className="px-6 py-24">
         <div className="mx-auto max-w-6xl">
           <Reveal>
-            <p className="text-sm font-bold uppercase tracking-[0.2em] text-teal">
+            <p className="text-sm font-bold uppercase tracking-[0.2em] text-signal">
               What it does
             </p>
             <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl">
@@ -154,7 +152,7 @@ export default function SafeSight() {
             {CAPABILITIES.map((c, i) => (
               <Reveal key={c.title} delay={(i % 3) * 0.07}>
                 <Card className="h-full">
-                  <c.icon className="h-7 w-7 text-violet" />
+                  <c.icon className="h-7 w-7 text-primary" />
                   <h3 className="mt-5 text-lg font-semibold">{c.title}</h3>
                   <p className="mt-3 text-[15px] text-muted">{c.body}</p>
                 </Card>
@@ -171,7 +169,7 @@ export default function SafeSight() {
       >
         <div className="mx-auto max-w-6xl">
           <Reveal>
-            <p className="text-sm font-bold uppercase tracking-[0.2em] text-teal">
+            <p className="text-sm font-bold uppercase tracking-[0.2em] text-signal">
               The two systems
             </p>
             <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl">
@@ -182,7 +180,7 @@ export default function SafeSight() {
             <Reveal>
               <Card className="h-full">
                 <h3 className="text-xl font-semibold">Practice Operations OS</h3>
-                <p className="mt-1 font-medium text-teal">
+                <p className="mt-1 font-medium text-signal">
                   The admin, done before you arrive.
                 </p>
                 <ul className="mt-5 space-y-3 text-[15px] text-muted">
@@ -194,7 +192,7 @@ export default function SafeSight() {
                     "Staff coordination & internal comms",
                   ].map((x) => (
                     <li key={x} className="flex gap-3">
-                      <span className="text-violet">→</span>
+                      <span className="text-primary">→</span>
                       {x}
                     </li>
                   ))}
@@ -204,7 +202,7 @@ export default function SafeSight() {
             <Reveal delay={0.07}>
               <Card className="h-full">
                 <h3 className="text-xl font-semibold">Patient Experience OS</h3>
-                <p className="mt-1 font-medium text-teal">
+                <p className="mt-1 font-medium text-signal">
                   Every patient, looked after.
                 </p>
                 <ul className="mt-5 space-y-3 text-[15px] text-muted">
@@ -216,7 +214,7 @@ export default function SafeSight() {
                     "Patient-education content, on schedule",
                   ].map((x) => (
                     <li key={x} className="flex gap-3">
-                      <span className="text-violet">→</span>
+                      <span className="text-primary">→</span>
                       {x}
                     </li>
                   ))}
@@ -231,7 +229,7 @@ export default function SafeSight() {
       <section id="outcomes" className="px-6 py-24">
         <div className="mx-auto max-w-6xl">
           <Reveal>
-            <p className="text-sm font-bold uppercase tracking-[0.2em] text-teal">
+            <p className="text-sm font-bold uppercase tracking-[0.2em] text-signal">
               Outcomes
             </p>
             <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl">
@@ -258,8 +256,8 @@ export default function SafeSight() {
             ].map((o, i) => (
               <Reveal key={o.stat} delay={i * 0.07}>
                 <Card className="h-full">
-                  <o.icon className="h-7 w-7 text-violet" />
-                  <p className="mt-5 text-2xl font-extrabold text-gradient">
+                  <o.icon className="h-7 w-7 text-primary" />
+                  <p className="mt-5 text-2xl font-extrabold text-primary">
                     {o.stat}
                   </p>
                   <p className="mt-3 text-[15px] text-muted">{o.body}</p>
@@ -291,12 +289,8 @@ export default function SafeSight() {
       </section>
 
       {/* CONTACT */}
-      <section
-        id="contact"
-        className="relative overflow-hidden px-6 py-28 text-center"
-      >
-        <div className="pointer-events-none absolute left-1/2 top-1/2 h-[460px] w-[760px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-teal/15 blur-[140px]" />
-        <div className="relative mx-auto max-w-2xl">
+      <section id="contact" className="px-6 py-28 text-center">
+        <div className="mx-auto max-w-2xl">
           <Reveal>
             <h2 className="font-display text-4xl font-extrabold md:text-5xl">
               See SafeSight run your practice.

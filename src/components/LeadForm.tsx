@@ -39,8 +39,11 @@ export function LeadForm({ source = "laisa" }: { source?: string }) {
 
   if (state === "done") {
     return (
-      <div className="rounded-2xl border border-teal/30 bg-teal/5 p-8 text-center">
-        <p className="text-lg font-semibold text-teal">{message}</p>
+      <div className="rounded-[14px] border border-signal/30 bg-signal/5 p-8 text-center">
+        <p className="flex items-center justify-center gap-2 text-lg font-semibold text-signal">
+          <span className="handled-dot" />
+          {message}
+        </p>
       </div>
     );
   }
@@ -56,7 +59,7 @@ export function LeadForm({ source = "laisa" }: { source?: string }) {
         name="message"
         rows={3}
         placeholder="What would you like StudEx Ai OS to run for you?"
-        className="flex w-full rounded-xl border border-line bg-ink-2/70 px-4 py-3 text-[15px] text-text placeholder:text-muted/70 focus:border-violet/50 focus:outline-none focus:ring-2 focus:ring-violet/30 transition-all"
+        className="flex w-full rounded-[10px] border border-line bg-surface-2 px-4 py-3 text-[15px] text-ink placeholder:text-muted/70 focus:border-signal/50 focus:outline-none focus:ring-2 focus:ring-signal/30 transition-colors"
       />
       <Button type="submit" size="lg" disabled={state === "loading"}>
         {state === "loading" ? "Sending…" : "Book a walkthrough"}
