@@ -88,6 +88,12 @@ export default function LaisaDashboard() {
           >
             {B.tagline}
           </span>
+          <span
+            className="hidden lg:block text-[10px] uppercase tracking-widest"
+            style={{ color: B.muted, opacity: 0.6 }}
+          >
+            Powered by StudEx Ai OS
+          </span>
           <div className="ml-auto flex items-center gap-1 rounded-full p-1"
             style={{ background: B.card, border: `1px solid ${B.border}` }}>
             {UNITS.map((u) => (
