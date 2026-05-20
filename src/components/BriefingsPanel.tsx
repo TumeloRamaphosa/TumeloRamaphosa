@@ -39,7 +39,7 @@ export function BriefingsPanel({
   return (
     <div className="space-y-5">
       <div>
-        <h3 className="text-lg font-bold" style={{ color: brand.text }}>
+        <h3 className="font-display text-xl font-semibold" style={{ color: brand.text }}>
           Briefings &amp; updates
         </h3>
         <p className="text-xs" style={{ color: brand.muted }}>

@@ -164,8 +164,8 @@ export function CharlieDemo({ brand }: { brand: Brand }) {
         <button
           onClick={play}
           disabled={running}
-          className="flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-full disabled:opacity-60"
-          style={{ background: brand.primary, color: brand.bg }}
+          className="flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-[10px] disabled:opacity-60"
+          style={{ background: brand.primary, color: brand.text }}
         >
           {running ? (
             <Loader2 className="w-4 h-4 animate-spin" />

@@ -10,7 +10,6 @@ import {
   Camera,
   Megaphone,
   MessageCircle,
-  Plug,
   Bot,
   Sparkles,
 } from "lucide-react";
@@ -19,6 +18,7 @@ import { RoiPanel } from "@/components/RoiPanel";
 import { GoodXPanel } from "@/components/GoodXPanel";
 import { BriefingsPanel, type Briefing } from "@/components/BriefingsPanel";
 import { CharlieDemo } from "@/components/CharlieDemo";
+import { ComposioStatus } from "@/components/ComposioStatus";
 
 const B = LAISA;
 
@@ -210,25 +210,7 @@ export default function LaisaDashboard() {
         <RoiPanel brand={B} />
         <GoodXPanel brand={B} />
 
-        {/* Composio */}
-        <section>
-          <h2 className="text-sm font-bold uppercase tracking-[0.2em] mb-4" style={{ color: B.accent }}>
-            Connected assets — Composio
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-            {["Instagram", "Facebook", "WhatsApp", "Google Ads", "Gmail", "Website"].map((x) => (
-              <div key={x} style={{ background: B.card, border: `1px solid ${B.border}` }} className="rounded-xl p-4 text-center">
-                <Plug className="w-5 h-5 mx-auto mb-2" style={{ color: B.primary }} />
-                <div className="text-sm font-medium">{x}</div>
-                <div className="text-[11px] mt-1" style={{ color: B.accent }}>Ready to link</div>
-              </div>
-            ))}
-          </div>
-          <p className="text-[11px] mt-3" style={{ color: B.muted }}>
-            Connects with the client&apos;s Composio credentials — paste them
-            in and these go live.
-          </p>
-        </section>
+        <ComposioStatus brand={B} />
 
         <BriefingsPanel brand={B} briefings={BRIEFINGS} />
       </div>

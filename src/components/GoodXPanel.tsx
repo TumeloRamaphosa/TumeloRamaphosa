@@ -12,11 +12,12 @@ const CLAIMS = [
   { patient: "L. Botha", scheme: "Medihelp", amount: 2180, status: "Rejected" },
 ];
 
+// Aligned to DESIGN.md semantic palette: signal / info / warning / error.
 const STATUS_COLOR: Record<string, string> = {
-  Paid: "#22c55e",
-  Submitted: "#6366f1",
-  Shortfall: "#E8B86D",
-  Rejected: "#ef4444",
+  Paid: "#3fbe85",
+  Submitted: "#3B6B8F",
+  Shortfall: "#D4B574",
+  Rejected: "#C0492F",
 };
 
 function zar(n: number) {
@@ -29,7 +30,7 @@ export function GoodXPanel({ brand }: { brand: Brand }) {
     <div className="space-y-5">
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div>
-          <h3 className="text-lg font-bold" style={{ color: brand.text }}>
+          <h3 className="font-display text-xl font-semibold" style={{ color: brand.text }}>
             Payments &amp; medical aid — GoodX
           </h3>
           <p className="text-xs" style={{ color: brand.muted }}>
@@ -47,9 +48,9 @@ export function GoodXPanel({ brand }: { brand: Brand }) {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { icon: CreditCard, label: "Collected (30d)", value: zar(486_200), color: brand.accent },
-          { icon: FileCheck2, label: "Claims paid", value: zar(312_400), color: "#22c55e" },
+          { icon: FileCheck2, label: "Claims paid", value: zar(312_400), color: "#3fbe85" },
           { icon: Clock3, label: "Awaiting medical aid", value: zar(58_900), color: brand.primary },
-          { icon: AlertTriangle, label: "Shortfalls to chase", value: zar(21_650), color: "#E8B86D" },
+          { icon: AlertTriangle, label: "Shortfalls to chase", value: zar(21_650), color: "#D4B574" },
         ].map((s) => (
           <div key={s.label} style={tile} className="rounded-xl p-5 flex flex-col gap-2">
             <div className="flex items-center justify-between">
@@ -61,7 +62,7 @@ export function GoodXPanel({ brand }: { brand: Brand }) {
               </span>
               <s.icon className="w-4 h-4" style={{ color: s.color }} />
             </div>
-            <div className="text-2xl font-bold" style={{ color: s.color }}>
+            <div className="font-display text-2xl font-semibold" style={{ color: s.color }}>
               {s.value}
             </div>
           </div>

@@ -113,7 +113,7 @@ export function RoiPanel({
     <div className="space-y-5">
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div>
-          <h3 className="text-lg font-bold" style={{ color: brand.text }}>
+          <h3 className="font-display text-xl font-semibold" style={{ color: brand.text }}>
             Time &amp; money — what the platform is worth
           </h3>
           <p className="text-xs" style={{ color: brand.muted }}>
@@ -185,7 +185,7 @@ export function RoiPanel({
             </span>
           </div>
           <div
-            className="text-3xl font-extrabold"
+            className="font-display text-3xl font-semibold"
             style={{ color: brand.text }}
           >
             {zar(m.netSaving)}
@@ -349,7 +349,7 @@ function Tile({
         </span>
         <Icon className="w-4 h-4" style={{ color }} />
       </div>
-      <div className="text-2xl font-bold" style={{ color }}>
+      <div className="font-display text-2xl font-semibold" style={{ color }}>
         {value}
       </div>
       <div className="text-xs" style={{ color: brand.muted }}>
