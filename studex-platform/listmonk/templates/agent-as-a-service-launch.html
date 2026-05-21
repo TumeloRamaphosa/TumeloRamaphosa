@@ -1,0 +1,97 @@
+<!--
+  StudEx Agent-as-a-Service — launch campaign (B2B / developer audience).
+  HOW TO USE IN LISTMONK:
+    1. Campaigns -> Create new -> set Format to "Raw HTML".
+    2. Paste this whole file into the content box.
+    3. Replace REPLACE_* placeholders (platform link, demo link).
+    4. Pick the "Agent Service" list, send a test, then schedule/send.
+  {{ UnsubscribeURL }} is required and must stay in the footer.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>StudEx Agent-as-a-Service is live</title>
+</head>
+<body style="margin:0; padding:0; background:#0a0a0a; font-family:Helvetica,Arial,sans-serif; color:#e6e6e6;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0a0a0a;">
+    <tr>
+      <td align="center" style="padding:24px 12px;">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px; width:100%; background:#111111; border-radius:14px; overflow:hidden; border:1px solid #1f1f1f;">
+
+          <!-- Header -->
+          <tr>
+            <td style="padding:24px 32px; border-bottom:1px solid #1f1f1f;">
+              <span style="font-size:22px; font-weight:800; letter-spacing:1px; color:#ff6b00;">STUDEX</span><span style="font-size:22px; font-weight:800; letter-spacing:1px; color:#00f0ff;">CLAW</span>
+              <span style="float:right; font-size:11px; color:#00ff88; padding-top:9px; letter-spacing:1px;">AGENT-AS-A-SERVICE</span>
+            </td>
+          </tr>
+
+          <!-- Hero -->
+          <tr>
+            <td style="padding:38px 32px 8px 32px;">
+              <h1 style="margin:0 0 14px 0; font-size:27px; line-height:1.25; color:#ffffff;">
+                Three persistent AI agents.<br /><span style="color:#00f0ff;">One cognitive brain.</span> Live today.
+              </h1>
+              <p style="margin:0 0 24px 0; font-size:15px; line-height:1.7; color:#b8b8b8;">
+                Hi {{ .Subscriber.FirstName }} — StudEx Agent-as-a-Service is now open. Deploy
+                always-on agents with RAG memory on Africa-optimised infrastructure, at
+                <strong style="color:#ffffff;">60&ndash;75% lower cost</strong> than traditional hyperscalers.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Tiers -->
+          <tr>
+            <td style="padding:0 32px 8px 32px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="padding:14px 16px; background:#0d0d0d; border:1px solid #1f1f1f; border-radius:10px;">
+                    <span style="font-size:12px; color:#00f0ff; letter-spacing:1px;">STARTER</span><br />
+                    <strong style="font-size:18px; color:#ffffff;">R1,550<span style="font-size:12px; color:#888;">/pm</span></strong>
+                    <span style="font-size:13px; color:#b8b8b8;"> &mdash; daily AI ops for solo teams</span>
+                  </td>
+                </tr>
+                <tr><td style="height:10px;"></td></tr>
+                <tr>
+                  <td style="padding:14px 16px; background:#0d0d0d; border:1px solid #ff2d78; border-radius:10px;">
+                    <span style="font-size:12px; color:#ff2d78; letter-spacing:1px;">POPULAR &middot; CREATOR STACK</span><br />
+                    <strong style="font-size:18px; color:#ffffff;">R3,500<span style="font-size:12px; color:#888;">/pm</span></strong>
+                    <span style="font-size:13px; color:#b8b8b8;"> &mdash; unlimited agents + advanced RAG</span>
+                  </td>
+                </tr>
+                <tr><td style="height:10px;"></td></tr>
+                <tr>
+                  <td style="padding:14px 16px; background:#0d0d0d; border:1px solid #1f1f1f; border-radius:10px;">
+                    <span style="font-size:12px; color:#ff00ff; letter-spacing:1px;">ENTERPRISE AGENT FORCE</span><br />
+                    <strong style="font-size:18px; color:#ffffff;">R15k&ndash;R55k<span style="font-size:12px; color:#888;">/pm</span></strong>
+                    <span style="font-size:13px; color:#b8b8b8;"> &mdash; full brain, all 3 agents, white-label</span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- CTA -->
+          <tr>
+            <td align="center" style="padding:28px 32px 36px 32px;">
+              <a href="REPLACE_PLATFORM_LINK" style="display:inline-block; background:#00f0ff; color:#000000; text-decoration:none; font-size:16px; font-weight:700; padding:15px 36px; border-radius:8px;">Deploy now</a>
+              <a href="REPLACE_DEMO_LINK" style="display:inline-block; margin-left:10px; border:1px solid #00f0ff; color:#00f0ff; text-decoration:none; font-size:16px; font-weight:700; padding:14px 30px; border-radius:8px;">Book a demo</a>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background:#0d0d0d; padding:22px 32px; text-align:center; font-size:12px; color:#777777; border-top:1px solid #1f1f1f;">
+              StudEx Cognitive Brain &bull; Built for Africa &bull; Tencent Cloud JNB1<br />
+              <a href="{{ UnsubscribeURL }}" style="color:#777777;">Unsubscribe</a>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

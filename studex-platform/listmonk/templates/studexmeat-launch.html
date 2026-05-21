@@ -1,0 +1,79 @@
+<!--
+  StudEx Meat — launch campaign for studexmeat.com (consumer audience).
+  HOW TO USE IN LISTMONK:
+    1. Campaigns -> Create new -> set Format to "Raw HTML".
+    2. Paste this whole file into the content box.
+    3. Replace REPLACE_* placeholders (hero image, order link).
+    4. Pick the "StudEx Meat" list, send a test to yourself, then schedule/send.
+  Merge tags: {{ .Subscriber.FirstName }} personalises the greeting.
+  {{ UnsubscribeURL }} is required and must stay in the footer.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>StudEx Meat is live</title>
+</head>
+<body style="margin:0; padding:0; background:#f4f1ec; font-family:Helvetica,Arial,sans-serif; color:#2b2118;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f1ec;">
+    <tr>
+      <td align="center" style="padding:24px 12px;">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px; width:100%; background:#ffffff; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+
+          <!-- Header -->
+          <tr>
+            <td style="background:#7a1f12; padding:22px 32px;">
+              <span style="font-size:22px; font-weight:800; letter-spacing:1px; color:#ffffff;">STUDEX&nbsp;MEAT</span>
+              <span style="float:right; font-size:12px; color:#f4c9a8; padding-top:8px;">Farm to table, the StudEx way</span>
+            </td>
+          </tr>
+
+          <!-- Hero image -->
+          <tr>
+            <td>
+              <img src="REPLACE_HERO_IMAGE_URL" alt="Fresh StudEx Meat" width="600" style="display:block; width:100%; height:auto;" />
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding:34px 32px 8px 32px;">
+              <h1 style="margin:0 0 14px 0; font-size:28px; line-height:1.2; color:#7a1f12;">We're officially live.</h1>
+              <p style="margin:0 0 16px 0; font-size:16px; line-height:1.6; color:#3a2e22;">
+                Hi {{ .Subscriber.FirstName }}, today we open the doors at
+                <strong>studexmeat.com</strong> — premium, traceable cuts straight from our
+                virtual-to-reality farming network. No middlemen, no mystery: just real meat,
+                fairly priced.
+              </p>
+              <ul style="margin:0 0 22px 0; padding-left:20px; font-size:15px; line-height:1.7; color:#3a2e22;">
+                <li>Ethically raised, fully traceable to the farm</li>
+                <li>Launch-day pricing for our email community only</li>
+                <li>Delivery slots opening this week</li>
+              </ul>
+            </td>
+          </tr>
+
+          <!-- CTA -->
+          <tr>
+            <td align="center" style="padding:6px 32px 34px 32px;">
+              <a href="REPLACE_ORDER_LINK" style="display:inline-block; background:#e0651a; color:#ffffff; text-decoration:none; font-size:17px; font-weight:700; padding:15px 40px; border-radius:8px;">Order now &rarr;</a>
+              <p style="margin:14px 0 0 0; font-size:12px; color:#8a7a68;">Launch offer ends Sunday. While stock lasts.</p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background:#f4f1ec; padding:22px 32px; text-align:center; font-size:12px; color:#8a7a68;">
+              StudEx Meat &bull; studexmeat.com<br />
+              You're getting this because you joined the StudEx community.<br />
+              <a href="{{ UnsubscribeURL }}" style="color:#8a7a68;">Unsubscribe</a>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

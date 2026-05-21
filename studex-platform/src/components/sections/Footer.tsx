@@ -1,11 +1,16 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import NewsletterSignup from "@/components/sections/NewsletterSignup";
 
 export default function Footer() {
   return (
     <footer className="relative py-16 px-4 bg-cyber-black border-t border-white/5">
       <div className="max-w-7xl mx-auto">
+        <div className="mb-12 max-w-2xl">
+          <NewsletterSignup />
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           <div className="md:col-span-2">
             <h3 className="font-display text-2xl font-black">

@@ -1,0 +1,52 @@
+# Listmonk — self-hosted, open-source email marketing for StudEx.
+# Powers two launch lists: studexmeat.com (consumer) + Agent-as-a-Service (B2B).
+# Quickstart:  cp .env.example .env  &&  edit secrets  &&  docker compose up -d
+# Admin UI then lives at http://localhost:9000  (configure SMTP there).
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${LISTMONK_DB_USER:-listmonk}
+      POSTGRES_PASSWORD: ${LISTMONK_DB_PASSWORD:-listmonk}
+      POSTGRES_DB: ${LISTMONK_DB_NAME:-listmonk}
+    volumes:
+      - listmonk-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${LISTMONK_DB_USER:-listmonk}"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+    networks: [listmonk]
+
+  app:
+    image: listmonk/listmonk:latest
+    restart: unless-stopped
+    ports:
+      - "${LISTMONK_PORT:-9000}:9000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # Listmonk reads config from LISTMONK_* env vars (double underscore = nested key).
+      LISTMONK_app__address: "0.0.0.0:9000"
+      LISTMONK_db__host: db
+      LISTMONK_db__port: 5432
+      LISTMONK_db__user: ${LISTMONK_DB_USER:-listmonk}
+      LISTMONK_db__password: ${LISTMONK_DB_PASSWORD:-listmonk}
+      LISTMONK_db__database: ${LISTMONK_DB_NAME:-listmonk}
+      LISTMONK_db__ssl_mode: disable
+      # First-run admin login (change these before first boot).
+      LISTMONK_ADMIN_USER: ${LISTMONK_ADMIN_USER:-admin}
+      LISTMONK_ADMIN_PASSWORD: ${LISTMONK_ADMIN_PASSWORD:-change-me-now}
+      TZ: ${TZ:-Africa/Johannesburg}
+    # --install (idempotent) sets up the DB on first boot, then --upgrade, then run.
+    command: [sh, -c, "./listmonk --install --idempotent --yes --config '' && ./listmonk --upgrade --yes --config '' && ./listmonk --config ''"]
+    networks: [listmonk]
+
+volumes:
+  listmonk-db:
+
+networks:
+  listmonk:
