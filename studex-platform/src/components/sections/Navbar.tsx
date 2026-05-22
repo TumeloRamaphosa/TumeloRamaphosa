@@ -9,8 +9,8 @@ import { Menu, X, Brain, Zap } from "lucide-react";
 const navLinks = [
   { href: "#stack", label: "Stack" },
   { href: "#pricing", label: "Pricing" },
-  { href: "#consultants", label: "AI Consultants" },
-  { href: "#devhub", label: "Dev Hub" },
+  { href: "/cloud", label: "Cloud" },
+  { href: "/console", label: "Console" },
   { href: "/brain", label: "Brain", highlight: true },
 ];
 
