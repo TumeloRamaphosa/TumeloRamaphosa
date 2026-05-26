@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { mockProvider, type ProvisionRequest, type AgentRuntime, type VMRegion } from "@/lib/cloud";
+import { getProvider } from "@/lib/provider";
 
 const VALID_REGIONS: VMRegion[] = ["jnb1", "cpt1", "eu-central"];
 const VALID_AGENTS: AgentRuntime[] = ["openclaw", "hermes", "claude-code", "none"];
@@ -26,7 +27,13 @@ export async function POST(req: Request) {
     owner: typeof body.owner === "string" ? body.owner : undefined,
   };
 
-  // Seam: this is where a real CoolifyProvider/OrgoProvider/Firecracker adapter runs.
-  const result = await mockProvider.provision(request);
-  return NextResponse.json(result);
+  // Routes to the Fly Sprites provider when SPRITES_TOKEN is set, else mock.
+  try {
+    const result = await getProvider().provision(request);
+    return NextResponse.json(result);
+  } catch (e) {
+    // Real provider failed — return a mock result with a warning so the UI flow still completes.
+    const result = await mockProvider.provision(request);
+    return NextResponse.json({ ...result, warning: String(e) });
+  }
 }

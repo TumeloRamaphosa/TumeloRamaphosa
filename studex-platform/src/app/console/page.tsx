@@ -64,6 +64,7 @@ function UsageBar({ label, value }: { label: string; value: number }) {
 export default function CommandCenter() {
   const [vms, setVms] = useState<VM[]>([]);
   const [runs, setRuns] = useState<AgentRun[]>([]);
+  const [provider, setProvider] = useState<string>("mock");
   const [showForm, setShowForm] = useState(false);
 
   // provision form
@@ -75,7 +76,10 @@ export default function CommandCenter() {
   const [bootSteps, setBootSteps] = useState<BootstrapStep[]>([]);
 
   useEffect(() => {
-    fetch("/api/vms").then((r) => r.json()).then((d) => setVms(d.vms || [])).catch(() => {});
+    fetch("/api/vms").then((r) => r.json()).then((d) => {
+      setVms(d.vms || []);
+      if (d.provider) setProvider(d.provider);
+    }).catch(() => {});
     fetch("/api/agent-runs").then((r) => r.json()).then((d) => setRuns(d.runs || [])).catch(() => {});
   }, []);
 
@@ -142,6 +146,9 @@ export default function CommandCenter() {
             </div>
           </div>
           <div className="flex items-center gap-3">
+            <Badge variant={provider === "fly-sprites" ? "pink" : "default"} className="hidden sm:flex">
+              {provider === "fly-sprites" ? "FLY SPRITES" : "MOCK DATA"}
+            </Badge>
             <Badge variant="green" className="animate-pulse">
               <Activity className="w-3 h-3 mr-1" />
               ALL SYSTEMS GO
