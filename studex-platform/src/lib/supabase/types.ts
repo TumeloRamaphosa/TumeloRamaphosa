@@ -42,3 +42,43 @@ export interface RocketStatus {
   gpu_info: string;
   last_launched: string;
 }
+
+// ── Home Automation Hub ──────────────────────────────────────────────
+
+export type DeviceSource = "wifi" | "usb" | "ble" | "ha";
+
+export interface Hub {
+  id: string;
+  owner_id: string | null;
+  name: string;
+  platform: string | null;
+  status: "online" | "offline";
+  last_seen: string;
+  created_at: string;
+}
+
+export interface Device {
+  id: string;
+  hub_id: string;
+  source: DeviceSource;
+  external_id: string;
+  name: string | null;
+  type: string | null;
+  manufacturer: string | null;
+  model: string | null;
+  ip_address: string | null;
+  mac_address: string | null;
+  capabilities: Record<string, unknown>;
+  online: boolean;
+  last_seen: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DevicesResponse {
+  configured: boolean;
+  hubs: Hub[];
+  devices: Device[];
+  counts: { total: number; online: number; wifi: number; usb: number; ble: number; ha: number };
+  error?: string;
+}

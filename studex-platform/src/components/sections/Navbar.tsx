@@ -11,6 +11,7 @@ const navLinks = [
   { href: "#pricing", label: "Pricing" },
   { href: "#consultants", label: "AI Consultants" },
   { href: "#devhub", label: "Dev Hub" },
+  { href: "/devices", label: "Devices" },
   { href: "/brain", label: "Brain", highlight: true },
 ];
 
