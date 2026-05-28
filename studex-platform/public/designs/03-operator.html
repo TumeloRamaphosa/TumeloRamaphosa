@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DEVICE HUB · OPERATOR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ededed;
+    --panel:#f6f6f6;
+    --rule:#1a1a1a;
+    --rule-2:#2a2a2a;
+    --hair:rgba(0,0,0,0.18);
+    --ink:#0d0d0d;
+    --ink-2:#262626;
+    --muted:#6b6b6b;
+    --accent:#ff5500;     /* safety orange */
+    --ok:#127a3d;
+    --off:#7a7a7a;
+    --mono:"IBM Plex Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+    --sans:"IBM Plex Sans", -apple-system, system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--mono);
+    font-size:13px;
+    line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+    padding:24px;
+    min-height:100vh;
+  }
+  .frame{
+    max-width:1320px;margin:0 auto;
+    background:var(--panel);
+    border:1px solid var(--rule);
+  }
+
+  /* ── Header bar ───────────────────────────────────────── */
+  .bar{
+    display:grid;
+    grid-template-columns:1fr auto auto auto;
+    align-items:stretch;
+    border-bottom:1px solid var(--rule);
+  }
+  .bar > *{padding:14px 18px;border-right:1px solid var(--rule)}
+  .bar > *:last-child{border-right:none}
+  .brand{
+    display:flex;align-items:center;gap:14px;
+  }
+  .brand .logomark{
+    width:22px;height:22px;background:var(--ink);position:relative;
+  }
+  .brand .logomark::after{
+    content:"";position:absolute;inset:5px;background:var(--accent);
+  }
+  .brand .title{
+    font-family:var(--mono);
+    font-weight:700;font-size:13px;letter-spacing:0.16em;text-transform:uppercase;
+  }
+  .brand .ver{color:var(--muted);font-weight:500;margin-left:8px}
+  .stat{font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+  .stat .led{width:8px;height:8px;background:var(--ok);box-shadow:0 0 0 2px rgba(18,122,61,0.18)}
+  .stat .led.warn{background:var(--accent);box-shadow:0 0 0 2px rgba(255,85,0,0.18)}
+  .clock{font-variant-numeric:tabular-nums;color:var(--ink-2);font-size:13px;letter-spacing:0.06em}
+
+  /* ── Toolbar ──────────────────────────────────────────── */
+  .toolbar{
+    display:grid;grid-template-columns:auto 1fr auto;align-items:stretch;
+    border-bottom:1px solid var(--rule);
+  }
+  .filterset{display:flex;border-right:1px solid var(--rule)}
+  .filterset button{
+    appearance:none;background:transparent;border:none;border-right:1px solid var(--hair);
+    padding:12px 18px;font-family:var(--mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;
+    color:var(--ink-2);cursor:pointer;font-weight:500;
+  }
+  .filterset button:last-child{border-right:none}
+  .filterset button.active{background:var(--ink);color:#fff}
+  .search{
+    display:flex;align-items:center;gap:10px;padding:8px 16px;border-right:1px solid var(--rule);
+  }
+  .search input{
+    appearance:none;background:transparent;border:none;outline:none;
+    font-family:var(--mono);font-size:13px;color:var(--ink);width:100%;
+  }
+  .search .lbl{font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted)}
+  .actions{display:flex}
+  .actions button{
+    appearance:none;background:transparent;border:none;border-left:1px solid var(--hair);
+    padding:0 18px;font-family:var(--mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;
+    color:var(--ink);cursor:pointer;
+  }
+  .actions button:first-child{border-left:none}
+  .actions .danger{color:var(--accent)}
+
+  /* ── KPI strip ────────────────────────────────────────── */
+  .kpis{
+    display:grid;grid-template-columns:repeat(6, 1fr);
+    border-bottom:1px solid var(--rule);background:var(--bg);
+  }
+  .kpi{padding:14px 18px;border-right:1px solid var(--hair)}
+  .kpi:last-child{border-right:none}
+  .kpi .k{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted)}
+  .kpi .v{
+    font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:700;font-size:28px;line-height:1.1;color:var(--ink);
+    margin-top:4px;
+  }
+  .kpi.accent .v{color:var(--accent)}
+  .kpi .d{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:2px;letter-spacing:0.06em}
+
+  /* ── Devices table ───────────────────────────────────── */
+  .tablewrap{padding:0}
+  table.devices{
+    width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px;
+  }
+  table.devices thead th{
+    background:var(--ink);color:#f0f0f0;
+    text-align:left;padding:10px 14px;
+    font-size:10px;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;
+    border-right:1px solid var(--rule-2);
+  }
+  table.devices thead th:last-child{border-right:none}
+  table.devices tbody td{
+    padding:14px;border-bottom:1px solid var(--hair);
+    font-variant-numeric:tabular-nums;color:var(--ink-2);
+    border-right:1px solid var(--hair);
+  }
+  table.devices tbody td:last-child{border-right:none}
+  table.devices tbody tr:nth-child(odd) td{background:rgba(0,0,0,0.015)}
+  table.devices tbody tr:hover td{background:rgba(255,85,0,0.06)}
+
+  .src{
+    display:inline-block;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;
+    padding:3px 8px;border:1px solid var(--ink);font-weight:600;color:var(--ink);
+  }
+  .src.usb{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .src.ble{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+  .name{color:var(--ink);font-weight:600}
+  .id{color:var(--muted);font-size:11px}
+  .vendor{color:var(--ink-2)}
+  .addr{color:var(--ink-2);letter-spacing:0.02em}
+  .seen{color:var(--muted)}
+
+  .state{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:700;
+  }
+  .state .led{width:7px;height:7px;background:var(--ok)}
+  .state.on{color:var(--ok)}
+  .state.off{color:var(--off)}
+  .state.off .led{background:var(--off)}
+
+  .rowbtn{
+    appearance:none;border:1px solid var(--ink);background:transparent;
+    padding:4px 10px;font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;
+    cursor:pointer;color:var(--ink);
+  }
+  .rowbtn:hover{background:var(--ink);color:#fff}
+  .rowbtn.warn{border-color:var(--accent);color:var(--accent)}
+  .rowbtn.warn:hover{background:var(--accent);color:#fff}
+
+  /* ── Status bar ──────────────────────────────────────── */
+  .statusbar{
+    display:grid;grid-template-columns:auto auto 1fr auto;
+    border-top:1px solid var(--rule);background:var(--bg);
+    font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);
+  }
+  .statusbar > *{padding:10px 16px;border-right:1px solid var(--hair)}
+  .statusbar > *:last-child{border-right:none;text-align:right}
+  .statusbar .ok{color:var(--ok)}
+  .statusbar .warn{color:var(--accent)}
+
+  @media (max-width:900px){
+    .kpis{grid-template-columns:repeat(3,1fr)}
+    table.devices thead th:nth-child(4),
+    table.devices tbody td:nth-child(4){display:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="frame">
+
+  <!-- Header -->
+  <div class="bar">
+    <div class="brand">
+      <div class="logomark" aria-hidden="true"></div>
+      <div>
+        <div class="title">Device Hub <span class="ver">/ v1.0.0</span></div>
+        <div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-top:2px">Mac mini · Hub Connector</div>
+      </div>
+    </div>
+    <div class="stat"><span class="led"></span>Hub ONLINE</div>
+    <div class="stat"><span class="led"></span>Supabase OK</div>
+    <div class="stat clock" id="clock">28 MAY 26 · 18:42:07 SAST</div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <div class="filterset" role="tablist">
+      <button class="active">All · 06</button>
+      <button>Wi-Fi · 04</button>
+      <button>USB · 02</button>
+      <button>BLE · 00</button>
+      <button>HA · 00</button>
+    </div>
+    <div class="search">
+      <span class="lbl">Q ›</span>
+      <input placeholder="search name · ip · mac · vendor" />
+    </div>
+    <div class="actions">
+      <button>Rescan</button>
+      <button>Export</button>
+      <button class="danger">Halt</button>
+    </div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpis">
+    <div class="kpi"><div class="k">Devices</div><div class="v">06</div><div class="d">tracked</div></div>
+    <div class="kpi"><div class="k">Online</div><div class="v" style="color:var(--ok)">05</div><div class="d">last 30 s</div></div>
+    <div class="kpi"><div class="k">Wi-Fi</div><div class="v">04</div><div class="d">via ARP</div></div>
+    <div class="kpi"><div class="k">USB</div><div class="v">02</div><div class="d">enumerated</div></div>
+    <div class="kpi accent"><div class="k">Stale &gt; 1 h</div><div class="v">01</div><div class="d">attention</div></div>
+    <div class="kpi"><div class="k">Cycle</div><div class="v">30 s</div><div class="d">scan interval</div></div>
+  </div>
+
+  <!-- Devices table -->
+  <div class="tablewrap">
+    <table class="devices">
+      <thead>
+        <tr>
+          <th style="width:80px">Src</th>
+          <th style="width:32%">Device</th>
+          <th>Vendor</th>
+          <th>Address</th>
+          <th>Last seen</th>
+          <th style="width:110px">State</th>
+          <th style="width:120px">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="src">Wi-Fi</span></td>
+          <td><div class="name">HomePod mini</div><div class="id">homepod-living · room: living-room</div></td>
+          <td class="vendor">Apple, Inc.</td>
+          <td class="addr">192.168.1.21 · f0:18:98:aa:bb:cc</td>
+          <td class="seen">+2 s</td>
+          <td><span class="state on"><span class="led"></span>Online</span></td>
+          <td><button class="rowbtn">Inspect</button></td>
+        </tr>
+        <tr>
+          <td><span class="src">Wi-Fi</span></td>
+          <td><div class="name">Apple TV 4K</div><div class="id">appletv-living · tvOS 18.2</div></td>
+          <td class="vendor">Apple, Inc.</td>
+          <td class="addr">192.168.1.22 · ac:bc:32:01:02:03</td>
+          <td class="seen">+4 s</td>
+          <td><span class="state on"><span class="led"></span>Online</span></td>
+          <td><button class="rowbtn">Inspect</button></td>
+        </tr>
+        <tr>
+          <td><span class="src">Wi-Fi</span></td>
+          <td><div class="name">Mac mini Hub</div><div class="id">mac-mini-hub · macOS 15.2 · hub host</div></td>
+          <td class="vendor">Apple, Inc.</td>
+          <td class="addr">192.168.1.10 · a4:83:e7:00:01:02</td>
+          <td class="seen">live</td>
+          <td><span class="state on"><span class="led"></span>Online</span></td>
+          <td><button class="rowbtn">Inspect</button></td>
+        </tr>
+        <tr>
+          <td><span class="src usb">USB</span></td>
+          <td><div class="name">Magic Keyboard</div><div class="id">vid:05ac · pid:0267 · bus 001/003</div></td>
+          <td class="vendor">Apple, Inc.</td>
+          <td class="addr">— · USB 2.0</td>
+          <td class="seen">attached</td>
+          <td><span class="state on"><span class="led"></span>Online</span></td>
+          <td><button class="rowbtn">Inspect</button></td>
+        </tr>
+        <tr>
+          <td><span class="src">Wi-Fi</span></td>
+          <td><div class="name">Raspberry Pi 4</div><div class="id">raspberrypi · office · Linux 6.6</div></td>
+          <td class="vendor">Raspberry Pi Foundation</td>
+          <td class="addr">192.168.1.51 · dc:a6:32:11:22:33</td>
+          <td class="seen">+6 s</td>
+          <td><span class="state on"><span class="led"></span>Online</span></td>
+          <td><button class="rowbtn">Inspect</button></td>
+        </tr>
+        <tr>
+          <td><span class="src">Wi-Fi</span></td>
+          <td><div class="name">The Frame</div><div class="id">samsung-frame · model UN55LS03A</div></td>
+          <td class="vendor">Samsung Electronics</td>
+          <td class="addr">192.168.1.45 · 8c:79:f5:0a:0b:0c</td>
+          <td class="seen">-6 h 02 m</td>
+          <td><span class="state off"><span class="led"></span>Offline</span></td>
+          <td><button class="rowbtn warn">Probe</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Status bar -->
+  <div class="statusbar">
+    <div><span class="ok">●</span> Hub link · OK</div>
+    <div>Service-role · RLS enforced</div>
+    <div>Scan cycle · 30 s · next in 24 s</div>
+    <div>Build #002 · 28 v 2026 · <span class="warn">1 stale</span></div>
+  </div>
+
+</div>
+
+<script>
+  // Tiny live clock — feels alive without doing anything else.
+  function pad(n){return String(n).padStart(2,"0")}
+  function tick(){
+    const d = new Date();
+    document.getElementById("clock").textContent =
+      "28 MAY 26 · " + pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds()) + " SAST";
+  }
+  tick(); setInterval(tick, 1000);
+</script>
+
+</body>
+</html>

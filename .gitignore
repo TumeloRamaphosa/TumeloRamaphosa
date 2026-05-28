@@ -1,0 +1,3 @@
+# Agent skill installs (Claude Code / huashu-design etc.) — local tooling only
+.agents/
+skills-lock.json

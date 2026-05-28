@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Device Hub — Home</title>
+<style>
+  :root{
+    --bg:#f5f5f7;
+    --card:#ffffff;
+    --text:#1d1d1f;
+    --text-soft:#6e6e73;
+    --hairline:rgba(60,60,67,0.12);
+    --blue:#0a84ff;
+    --green:#34c759;
+    --orange:#ff9f0a;
+    --purple:#bf5af2;
+    --pink:#ff375f;
+    --teal:#5ac8fa;
+    --gray:#8e8e93;
+    --shadow:0 1px 2px rgba(0,0,0,0.04), 0 6px 24px rgba(0,0,0,0.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased}
+  html,body{background:var(--bg);color:var(--text)}
+  body{
+    font-family:-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro", "Helvetica Neue", system-ui, sans-serif;
+    font-size:15px;
+    line-height:1.4;
+    padding:0;
+    min-height:100vh;
+  }
+  .wrap{max-width:1100px;margin:0 auto;padding:32px 28px 80px}
+
+  /* Top bar */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:8px;
+  }
+  .topbar .title{display:flex;align-items:center;gap:10px}
+  .topbar h1{
+    font-size:34px;font-weight:700;letter-spacing:-0.02em;
+  }
+  .topbar .sub{color:var(--text-soft);font-size:15px;font-weight:400;margin-top:2px}
+  .icon-btn{
+    width:36px;height:36px;border-radius:50%;background:var(--card);
+    box-shadow:var(--shadow);display:grid;place-items:center;border:none;cursor:pointer;
+  }
+  .icon-btn svg{width:18px;height:18px;color:var(--text)}
+
+  .status-strip{
+    margin:18px 0 28px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  }
+  .pill{
+    display:inline-flex;align-items:center;gap:7px;
+    padding:7px 14px;border-radius:999px;background:var(--card);
+    box-shadow:var(--shadow);font-size:13px;font-weight:500;
+  }
+  .pill .dot{width:8px;height:8px;border-radius:50%}
+  .pill.online .dot{background:var(--green)}
+  .pill.muted{color:var(--text-soft)}
+
+  /* Filter chips */
+  .filters{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+  .chip{
+    padding:7px 14px;border-radius:999px;background:transparent;
+    border:1px solid var(--hairline);font-size:13px;font-weight:500;color:var(--text);
+    cursor:pointer;
+  }
+  .chip.active{background:var(--text);color:#fff;border-color:var(--text)}
+
+  /* Favourites row */
+  .section-title{
+    font-size:22px;font-weight:700;letter-spacing:-0.01em;margin:24px 0 12px;
+  }
+
+  .grid{
+    display:grid;grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));gap:14px;
+  }
+  .tile{
+    background:var(--card);border-radius:18px;padding:18px;box-shadow:var(--shadow);
+    display:flex;flex-direction:column;gap:14px;min-height:140px;position:relative;
+    transition:transform .15s ease;
+  }
+  .tile:hover{transform:translateY(-1px)}
+  .tile.offline{opacity:0.65}
+  .tile .top{display:flex;align-items:center;justify-content:space-between}
+  .tile .ico{
+    width:36px;height:36px;border-radius:10px;display:grid;place-items:center;
+    background:rgba(10,132,255,0.12);color:var(--blue);
+  }
+  .tile.green .ico{background:rgba(52,199,89,0.14);color:var(--green)}
+  .tile.orange .ico{background:rgba(255,159,10,0.14);color:var(--orange)}
+  .tile.purple .ico{background:rgba(191,90,242,0.14);color:var(--purple)}
+  .tile.teal .ico{background:rgba(90,200,250,0.18);color:var(--teal)}
+  .tile.pink .ico{background:rgba(255,55,95,0.14);color:var(--pink)}
+  .tile.gray .ico{background:rgba(142,142,147,0.18);color:var(--gray)}
+  .tile .ico svg{width:20px;height:20px}
+  .tile .toggle{
+    width:32px;height:32px;border-radius:50%;background:rgba(60,60,67,0.08);
+    display:grid;place-items:center;cursor:pointer;
+  }
+  .tile.green .toggle{background:rgba(52,199,89,0.18);color:var(--green)}
+  .tile .name{font-size:16px;font-weight:600;letter-spacing:-0.01em;line-height:1.25}
+  .tile .meta{font-size:13px;color:var(--text-soft);line-height:1.45}
+  .tile .row{display:flex;justify-content:space-between;align-items:baseline}
+  .tile .state{font-size:13px;font-weight:600}
+  .tile.green .state{color:var(--green)}
+  .tile.offline .state{color:var(--text-soft)}
+
+  /* Stats card */
+  .stats{
+    background:var(--card);border-radius:18px;padding:20px 22px;box-shadow:var(--shadow);
+    display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px;
+  }
+  .stats .cell{padding:6px 4px;border-right:1px solid var(--hairline)}
+  .stats .cell:last-child{border-right:none}
+  .stats .num{font-size:28px;font-weight:700;letter-spacing:-0.02em}
+  .stats .lbl{font-size:12px;color:var(--text-soft);margin-top:2px}
+
+  .footer{
+    margin-top:36px;color:var(--text-soft);font-size:12px;text-align:center;
+  }
+
+  @media (max-width:600px){
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .stats .cell:nth-child(2){border-right:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="topbar">
+    <div>
+      <div class="title">
+        <h1>Home</h1>
+      </div>
+      <div class="sub">Mac mini hub &middot; 6 accessories &middot; 5 online</div>
+    </div>
+    <button class="icon-btn" aria-label="Add">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+    </button>
+  </header>
+
+  <div class="status-strip">
+    <span class="pill online"><span class="dot"></span>Hub Online</span>
+    <span class="pill muted">Updated 2 sec ago</span>
+    <span class="pill muted">JNB &middot; 22°C</span>
+  </div>
+
+  <div class="filters">
+    <button class="chip active">All</button>
+    <button class="chip">Wi-Fi</button>
+    <button class="chip">USB</button>
+    <button class="chip">Bluetooth</button>
+    <button class="chip">Home Assistant</button>
+  </div>
+
+  <h2 class="section-title">Favourites</h2>
+
+  <div class="grid">
+
+    <div class="tile pink">
+      <div class="top">
+        <div class="ico" title="HomePod">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="6"/><circle cx="12" cy="14" r="2"/></svg>
+        </div>
+        <div class="toggle" style="color:var(--pink);background:rgba(255,55,95,0.18)">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+      </div>
+      <div>
+        <div class="name">HomePod mini</div>
+        <div class="meta">Living Room &middot; Apple</div>
+      </div>
+      <div class="row"><span class="state" style="color:var(--pink)">Now playing</span><span class="meta">192.168.1.21</span></div>
+    </div>
+
+    <div class="tile purple">
+      <div class="top">
+        <div class="ico" title="Apple TV">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <div class="toggle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>
+        </div>
+      </div>
+      <div>
+        <div class="name">Apple TV 4K</div>
+        <div class="meta">Living Room &middot; Apple</div>
+      </div>
+      <div class="row"><span class="state" style="color:var(--purple)">Idle</span><span class="meta">tvOS 18.2</span></div>
+    </div>
+
+    <div class="tile green">
+      <div class="top">
+        <div class="ico" title="Mac mini">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="8" rx="2"/><circle cx="17" cy="12" r="0.8" fill="currentColor"/></svg>
+        </div>
+        <div class="toggle">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><circle cx="12" cy="12" r="8"/></svg>
+        </div>
+      </div>
+      <div>
+        <div class="name">Mac mini Hub</div>
+        <div class="meta">Study &middot; Apple</div>
+      </div>
+      <div class="row"><span class="state">Hub running</span><span class="meta">192.168.1.10</span></div>
+    </div>
+
+    <div class="tile teal">
+      <div class="top">
+        <div class="ico" title="USB">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.5"/><path d="M12 6v10M12 16l-3 3M12 16l3 3M9 13l3-3 3 3"/></svg>
+        </div>
+        <div class="toggle"></div>
+      </div>
+      <div>
+        <div class="name">Magic Keyboard</div>
+        <div class="meta">USB &middot; Apple</div>
+      </div>
+      <div class="row"><span class="state" style="color:var(--teal)">Attached</span><span class="meta">05ac:0267</span></div>
+    </div>
+
+    <div class="tile orange">
+      <div class="top">
+        <div class="ico" title="Raspberry Pi">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 10h8M8 14h5"/></svg>
+        </div>
+        <div class="toggle"></div>
+      </div>
+      <div>
+        <div class="name">Raspberry Pi 4</div>
+        <div class="meta">Office &middot; Linux</div>
+      </div>
+      <div class="row"><span class="state" style="color:var(--orange)">Reachable</span><span class="meta">192.168.1.51</span></div>
+    </div>
+
+    <div class="tile gray offline">
+      <div class="top">
+        <div class="ico" title="TV">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8"/></svg>
+        </div>
+        <div class="toggle"></div>
+      </div>
+      <div>
+        <div class="name">The Frame</div>
+        <div class="meta">Living Room &middot; Samsung</div>
+      </div>
+      <div class="row"><span class="state">No response</span><span class="meta">6h ago</span></div>
+    </div>
+
+  </div>
+
+  <h2 class="section-title">At a glance</h2>
+
+  <div class="stats">
+    <div class="cell"><div class="num">6</div><div class="lbl">Accessories</div></div>
+    <div class="cell"><div class="num" style="color:var(--green)">5</div><div class="lbl">Online</div></div>
+    <div class="cell"><div class="num">4</div><div class="lbl">Wi-Fi</div></div>
+    <div class="cell"><div class="num">2</div><div class="lbl">USB</div></div>
+  </div>
+
+  <div class="footer">Read-only mirror of the Mac mini's inventory &middot; reads via service-role API</div>
+
+</div>
+</body>
+</html>
