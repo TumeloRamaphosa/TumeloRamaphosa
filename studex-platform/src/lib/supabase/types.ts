@@ -82,3 +82,23 @@ export interface DevicesResponse {
   counts: { total: number; online: number; wifi: number; usb: number; ble: number; ha: number };
   error?: string;
 }
+
+export type CommandStatus = "pending" | "sent" | "done" | "failed";
+
+export interface Command {
+  id: string;
+  device_id: string;
+  hub_id: string;
+  action: string;
+  params: Record<string, unknown>;
+  status: CommandStatus;
+  result: Record<string, unknown> | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface EnqueueCommandResponse {
+  ok: boolean;
+  command?: Command;
+  error?: string;
+}

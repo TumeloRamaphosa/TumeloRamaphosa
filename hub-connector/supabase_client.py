@@ -90,3 +90,40 @@ class SupabaseClient:
             timeout=self.timeout,
         )
         resp.raise_for_status()
+
+    # ── Phase 2: commands ────────────────────────────────────────────
+
+    def fetch_pending_commands(self, hub_id: str, limit: int = 25) -> list[dict]:
+        """Return commands queued for this hub that haven't started yet."""
+        resp = requests.get(
+            f"{self.rest}/commands",
+            params={
+                "hub_id": f"eq.{hub_id}",
+                "status": "eq.pending",
+                "order": "created_at.asc",
+                "limit": str(limit),
+                "select": "*",
+            },
+            headers=self._headers,
+            timeout=self.timeout,
+        )
+        resp.raise_for_status()
+        return resp.json()
+
+    def update_command(
+        self,
+        command_id: str,
+        status: str,
+        result: dict | None = None,
+    ) -> None:
+        body: dict = {"status": status, "updated_at": _now_iso()}
+        if result is not None:
+            body["result"] = result
+        resp = requests.patch(
+            f"{self.rest}/commands",
+            params={"id": f"eq.{command_id}"},
+            headers=self._headers,
+            json=body,
+            timeout=self.timeout,
+        )
+        resp.raise_for_status()

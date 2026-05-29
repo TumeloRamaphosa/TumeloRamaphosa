@@ -69,6 +69,13 @@ def run_cycle(cfg: Config, client, dry_run: bool) -> None:
     client.set_hub_status(cfg.hub_id, "online")
     print(f"  pushed {pushed} device(s) to Supabase")
 
+    # Phase 2: drain the command queue (stub executor for now).
+    from executor import consume_pending
+
+    ok, bad = consume_pending(client, cfg.hub_id)
+    if ok or bad:
+        print(f"  commands: {ok} ok, {bad} failed")
+
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Home Automation Hub Connector")
