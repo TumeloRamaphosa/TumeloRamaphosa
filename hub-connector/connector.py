@@ -21,6 +21,7 @@ import time
 from datetime import datetime, timedelta, timezone
 
 from config import Config
+from discovery.seed import scan_seed
 from discovery.usb import scan_usb
 from discovery.wifi import scan_wifi
 
@@ -29,9 +30,15 @@ def _now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def discover() -> list[dict]:
+def discover(seed: bool = False, seed_only: bool = False) -> list[dict]:
     devices: list[dict] = []
-    for name, fn in (("wifi", scan_wifi), ("usb", scan_usb)):
+    if seed_only:
+        sources = (("seed", scan_seed),)
+    elif seed:
+        sources = (("wifi", scan_wifi), ("usb", scan_usb), ("seed", scan_seed))
+    else:
+        sources = (("wifi", scan_wifi), ("usb", scan_usb))
+    for name, fn in sources:
         try:
             found = fn()
             devices.extend(found)
@@ -51,10 +58,16 @@ def _print_table(devices: list[dict]) -> None:
         print(f"  - [{d['source']:>4}] {d.get('name') or ident}  ({vendor})  {ident}")
 
 
-def run_cycle(cfg: Config, client, dry_run: bool) -> None:
+def run_cycle(
+    cfg: Config,
+    client,
+    dry_run: bool,
+    seed: bool = False,
+    seed_only: bool = False,
+) -> None:
     print(f"[{_now_iso()}] scanning...")
     started = datetime.now(timezone.utc)
-    devices = discover()
+    devices = discover(seed=seed, seed_only=seed_only)
     print(f"  total: {len(devices)} device(s)")
 
     if dry_run:
@@ -82,6 +95,8 @@ def main() -> int:
     parser.add_argument("--once", action="store_true", help="run a single scan cycle and exit")
     parser.add_argument("--dry-run", action="store_true", help="scan and print only; no Supabase calls")
     parser.add_argument("--interval", type=int, default=None, help="seconds between scans (overrides SCAN_INTERVAL)")
+    parser.add_argument("--seed", action="store_true", help="also publish synthetic demo devices (good for non-home environments)")
+    parser.add_argument("--seed-only", action="store_true", help="publish ONLY synthetic demo devices; skip real WiFi/USB scans (use in cloud containers)")
     args = parser.parse_args()
 
     cfg = Config()
@@ -128,13 +143,14 @@ def main() -> int:
     signal.signal(signal.SIGTERM, _shutdown)
 
     if args.once:
-        run_cycle(cfg, client, args.dry_run)
+        run_cycle(cfg, client, args.dry_run, seed=args.seed, seed_only=args.seed_only)
         return 0
 
-    print(f"Starting scan loop (every {interval}s). Ctrl-C to stop.")
+    mode = "seed-only" if args.seed_only else ("seed+real" if args.seed else "real")
+    print(f"Starting scan loop (every {interval}s, mode={mode}). Ctrl-C to stop.")
     while True:
         try:
-            run_cycle(cfg, client, args.dry_run)
+            run_cycle(cfg, client, args.dry_run, seed=args.seed, seed_only=args.seed_only)
         except Exception as exc:
             print(f"  cycle error: {exc}", file=sys.stderr)
         time.sleep(interval)
