@@ -1,0 +1,9 @@
+{
+  "id": "JOB-2026-06-01-0700-competitor-prices",
+  "type": "perplexity_research",
+  "priority": "normal",
+  "prompt": "Compare current online prices and delivery options for grass-fed beef boxes from the top 5 online butchers in South Africa. List each brand, price per kg or per box, what's included, and any current promotions. Cite sources.",
+  "output": "vault/outputs/reports/competitors",
+  "created_by": "/competitor-watch",
+  "created_at": "2026-06-01T07:00:00+02:00"
+}
