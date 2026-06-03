@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getServiceSupabase } from "@/lib/supabase/service";
 
-// Subscribes a visitor to a Listmonk list. Two audiences:
+// Subscribes a visitor to a Listmonk list AND mirrors them into the Supabase
+// `contacts` table so the CRM/dashboard has them. Two audiences:
 //   "meat"  -> studexmeat.com consumer list
 //   "agent" -> Agent-as-a-Service B2B list
 //   "both"  -> subscribed to both lists
@@ -72,7 +74,8 @@ export async function POST(request: NextRequest) {
     });
 
     if (res.status === 409) {
-      // Already subscribed — treat as success so we don't leak list membership.
+      // Already subscribed — still ensure the contact exists in Supabase.
+      await mirrorToContacts(email, name, listKey).catch(() => {});
       return NextResponse.json({ ok: true, message: "You're already on the list." });
     }
 
@@ -82,9 +85,42 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Could not subscribe right now." }, { status: 502 });
     }
 
+    const lmJson = await res.json().catch(() => null);
+    const listmonkId = Number.isInteger(lmJson?.data?.id) ? lmJson.data.id : null;
+    await mirrorToContacts(email, name, listKey, listmonkId).catch((e) =>
+      console.error("Supabase mirror failed", e)
+    );
+
     return NextResponse.json({ ok: true, message: "Check your inbox to confirm." });
   } catch (err) {
     console.error("Listmonk subscribe error", err);
     return NextResponse.json({ error: "Could not reach the newsletter service." }, { status: 502 });
   }
+}
+
+async function mirrorToContacts(
+  email: string,
+  name: string,
+  listKey: string,
+  listmonkId: number | null = null,
+) {
+  const sb = getServiceSupabase();
+  if (!sb) return;
+  const productInterest =
+    listKey === "meat" ? ["Biltong"] :
+    listKey === "agent" ? ["Agent Service"] :
+    listKey === "both" ? ["Biltong", "Agent Service"] : [];
+
+  await sb.from("contacts").upsert(
+    {
+      name: name || email.split("@")[0],
+      email,
+      product_interest: productInterest,
+      status: "lead",
+      tags: ["newsletter", `signup:${listKey}`],
+      source: ["newsletter-form"],
+      listmonk_subscriber_id: listmonkId,
+    },
+    { onConflict: "email", ignoreDuplicates: false }
+  );
 }

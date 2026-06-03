@@ -6,16 +6,38 @@ sending domain (`studexmeat.com` and your platform/agent domain).
 
 ## Free + open-source sending options
 
-You asked to stay free/open-source and use your own agent mail address. Realistic paths:
+Listmonk stays open-source. The sending leg is **pluggable** — point it at
+whatever SMTP your domain is authenticated with.
 
 | Option | Cost | Deliverability | Notes |
 |--------|------|----------------|-------|
-| **Your agent mailbox SMTP** (e.g. agent@studex.dev) | Free (already have it) | OK for small/warm lists | Watch the provider's daily send limit; fine to start. |
-| **Self-hosted SMTP** (Postal, Mailcow — both open-source) | Server only | Needs warm-up + clean IP | Most control, most work. Good once volume grows. |
-| **Free tier of a transactional relay** (e.g. Brevo/MailerSend free tier) | Free up to a daily cap | High | Easiest deliverability; plug its SMTP into Listmonk. |
+| **Resend** (recommended) | Free tier: 100/day, 3,000/month; cheap thereafter | Excellent | One key powers Listmonk SMTP *and* the cold-outreach Resend SDK in the app. |
+| Your agent mailbox SMTP | Free | OK for small/warm lists | Watch the provider's daily limit; fine to start. |
+| Self-hosted (Postal, Mailcow) | Server only | Needs warm-up + clean IP | Most control, most work. |
 
 Whichever you pick, it plugs into **Listmonk → Settings → SMTP**. You can switch
 later without changing any code.
+
+### Resend → Listmonk SMTP (preferred)
+
+Settings → SMTP → Add:
+
+```
+Host:       smtp.resend.com
+Port:       465 (SSL/TLS)  OR  587 (STARTTLS)
+Username:   resend
+Password:   <your RESEND_API_KEY — keep in env, not in screenshots>
+From email: hello@studexmeat.com   (or your studex.dev mailbox)
+```
+
+The same API key drives the cold-outreach pipeline in the Next.js app (set
+`RESEND_API_KEY` in `.env.local`). Verify your sending domain in the Resend
+dashboard and add the SPF/DKIM records they show you — those are the only DNS
+changes you need.
+
+> Security note: if a Resend key is ever exposed in chat, screenshots, commits,
+> or a public log, **revoke it in the dashboard immediately** and generate a new
+> one. Keys never go into source code or `.env.example`.
 
 ## 1. SPF — authorise who can send for your domain
 

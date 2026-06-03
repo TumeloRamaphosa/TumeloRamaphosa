@@ -6,3 +6,8 @@ out/
 .env.*.local
 *.tsbuildinfo
 next-env.d.ts
+
+# Prospect contact data — keep out of git (PII / proprietary scoring)
+data/contacts/*
+!data/contacts/.gitkeep
+!data/contacts/README.md
