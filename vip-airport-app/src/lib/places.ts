@@ -37,10 +37,13 @@ interface AutocompletePrediction {
 }
 
 interface AutocompleteResponse {
+  // Google returns HTTP 200 even on errors; the real outcome is in `status`.
+  status?: string;
   predictions?: AutocompletePrediction[];
 }
 
 interface PlaceDetailsResponse {
+  status?: string;
   result?: {
     name?: string;
     formatted_address?: string;
@@ -102,6 +105,13 @@ export async function searchPlaces(query: string): Promise<PlaceSuggestion[]> {
 
     const res = await fetch(url);
     const json = (await res.json()) as AutocompleteResponse;
+
+    // Google signals failures (REQUEST_DENIED, OVER_QUERY_LIMIT, INVALID_REQUEST)
+    // with HTTP 200 + a status field. Treat those as a failure → demo fallback.
+    // ZERO_RESULTS is a legitimate empty result, not an error.
+    if (json.status && json.status !== 'OK' && json.status !== 'ZERO_RESULTS') {
+      return demoSuggestions(query);
+    }
     const predictions = json.predictions ?? [];
 
     return predictions.map((p) => ({
@@ -154,6 +164,10 @@ export async function resolvePlace(
     throw new Error(`Failed to fetch place details for ${suggestion.id}`, {
       cause,
     });
+  }
+
+  if (json.status && json.status !== 'OK') {
+    throw new Error(`Place details failed (${json.status}) for ${suggestion.id}`);
   }
 
   const location = json.result?.geometry?.location;

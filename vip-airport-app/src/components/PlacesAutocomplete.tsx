@@ -151,7 +151,14 @@ export function PlacesAutocomplete({
           placeholder={placeholder}
           placeholderTextColor={palette.textFaint}
           style={styles.input}
-          onFocus={() => setEditing(true)}
+          onFocus={() => {
+            // Seed the field with the current selection so refocusing to edit
+            // doesn't blank a previously chosen address.
+            if (!editing) {
+              setEditing(true);
+              if (value && query === '') setQuery(value.label);
+            }
+          }}
           onChangeText={(text) => {
             // Any typing implies an active edit session.
             if (!editing) setEditing(true);

@@ -29,28 +29,25 @@ export async function validateInvite(rawCode: string): Promise<InviteResult> {
       : { ok: false, message: 'That code isn’t recognised. Try AVIAR-VIP.' };
   }
 
-  const { data, error } = await supabase
-    .from('invite_codes')
-    .select('code, redeemed_at, expires_at')
-    .eq('code', code)
-    .maybeSingle();
-
+  // Validity check goes through a SECURITY DEFINER RPC so the code list is
+  // never exposed to clients (no direct table read).
+  const { data, error } = await supabase.rpc('check_invite', { p_code: code });
   if (error) return { ok: false, message: 'Could not verify code. Try again.' };
-  if (!data) return { ok: false, message: 'Invalid invitation code.' };
-  if (data.redeemed_at) return { ok: false, message: 'This code has already been used.' };
-  if (data.expires_at && new Date(data.expires_at) < new Date()) {
-    return { ok: false, message: 'This invitation has expired.' };
-  }
-  return { ok: true, message: 'Welcome to Aviar.' };
+  return data === true
+    ? { ok: true, message: 'Welcome to Aviar.' }
+    : { ok: false, message: 'Invalid or already-used invitation code.' };
 }
 
-/** Mark an invite code as redeemed by a user (best-effort; backend only). */
-export async function redeemInvite(rawCode: string, userId: string): Promise<void> {
-  if (!hasBackend) return;
-  const code = normalize(rawCode);
-  await supabase
-    .from('invite_codes')
-    .update({ redeemed_at: new Date().toISOString(), redeemed_by: userId })
-    .eq('code', code)
-    .is('redeemed_at', null);
+/**
+ * Atomically redeem an invite for the signed-in user (backend only). Returns
+ * true if this call claimed the code. Redemption is race-safe server-side, so
+ * a code can only ever be used once. Requires an authenticated session.
+ */
+export async function redeemInvite(rawCode: string): Promise<boolean> {
+  if (!hasBackend) return true;
+  const { data, error } = await supabase.rpc('redeem_invite', {
+    p_code: normalize(rawCode),
+  });
+  if (error) return false;
+  return data === true;
 }
