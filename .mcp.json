@@ -10,6 +10,10 @@
     "playwright": {
       "command": "npx",
       "args": ["-y", "@anthropic-ai/mcp-playwright"]
+    },
+    "gbrain": {
+      "command": "gbrain",
+      "args": ["serve"]
     }
   }
 }
