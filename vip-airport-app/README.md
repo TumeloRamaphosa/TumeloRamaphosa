@@ -69,7 +69,10 @@ src/
 supabase/
   migrations/0001_init.sql tables + enums + RLS + new-user trigger
   functions/
-    stitch-create-payment/ creates a Stitch payment, returns checkout URL
+    _shared/                cors/http helpers + Google Distance Matrix client
+    route-eta/              live traffic-aware ETA + distance (Distance Matrix)
+    request-ride/           server-authoritative ride creation (ETA + insert)
+    stitch-create-payment/  creates a Stitch payment, returns checkout URL
     stitch-webhook/         marks payments paid on Stitch callback
 ```
 
@@ -77,14 +80,19 @@ supabase/
 
 1. Create a Supabase project; run `supabase/migrations/0001_init.sql`.
 2. Set `EXPO_PUBLIC_SUPABASE_URL` / `EXPO_PUBLIC_SUPABASE_ANON_KEY` in `.env`.
-3. Deploy the Edge Functions and set Stitch + service-role secrets:
+3. Deploy the Edge Functions and set the secrets:
    ```bash
+   supabase functions deploy route-eta
+   supabase functions deploy request-ride
    supabase functions deploy stitch-create-payment
    supabase functions deploy stitch-webhook --no-verify-jwt
-   supabase secrets set STITCH_CLIENT_ID=... STITCH_CLIENT_SECRET=... \
+   supabase secrets set GOOGLE_MAPS_API_KEY=... \
+     STITCH_CLIENT_ID=... STITCH_CLIENT_SECRET=... \
      STITCH_ENV=sandbox STITCH_REDIRECT_URI=aviar://payment/return \
-     SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=...
+     SUPABASE_URL=... SUPABASE_ANON_KEY=... SUPABASE_SERVICE_ROLE_KEY=...
    ```
+   The app calls `route-eta` for live traffic-aware ETA/distance (it falls back
+   to a local estimate when no backend is configured).
 4. Register the `stitch-webhook` URL in your Stitch dashboard.
 
 ## Known scaffolding / next steps

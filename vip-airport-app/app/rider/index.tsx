@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Alert, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Screen } from '@/components/Screen';
@@ -12,8 +12,10 @@ import { useDeviceLocation } from '@/hooks/useDeviceLocation';
 import { palette, radius, spacing } from '@/constants/theme';
 import { DEMO_PICKUPS, OR_TAMBO_TERMINAL_A } from '@/constants/demo';
 import { formatZar } from '@/lib/geo';
+import { getServiceLevel, estimateFare } from '@/constants/serviceLevels';
 import { hasBackend } from '@/lib/env';
 import { createRidePayment, openCheckout } from '@/lib/payments';
+import { getRouteEta, type RouteEta } from '@/lib/routing';
 import type { Place, ServiceLevel } from '@/types';
 
 export default function BookRide() {
@@ -26,6 +28,7 @@ export default function BookRide() {
   const [airline, setAirline] = useState('');
   const [flightNumber, setFlightNumber] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [route, setRoute] = useState<RouteEta | null>(null);
 
   async function onUseMyLocation() {
     const place = await location.request();
@@ -38,6 +41,27 @@ export default function BookRide() {
     () => quote(pickup, destination, serviceLevel),
     [pickup, destination, serviceLevel, quote],
   );
+
+  // Fetch a live, traffic-aware ETA/distance for the chosen pickup. Falls back
+  // to the local estimate inside getRouteEta; we ignore stale responses.
+  useEffect(() => {
+    let active = true;
+    setRoute(null);
+    getRouteEta(pickup, destination).then((r) => {
+      if (active) setRoute(r);
+    });
+    return () => {
+      active = false;
+    };
+  }, [pickup, destination]);
+
+  // Prefer live route numbers when present; fare tracks the live distance.
+  const distanceKm = route?.distanceKm ?? q.distanceKm;
+  const etaMinutes = route?.etaMinutes ?? q.etaMinutes;
+  const fareZar = estimateFare(getServiceLevel(serviceLevel), distanceKm);
+  const etaLabel = route?.live
+    ? `${route.durationText ?? `~${etaMinutes} min`} in traffic`
+    : `~${etaMinutes} min`;
 
   async function onRequest() {
     setSubmitting(true);
@@ -184,28 +208,29 @@ export default function BookRide() {
 
       {/* Service level */}
       <AppText variant="label" color={palette.textMuted}>
-        CHOOSE YOUR SERVICE — {q.distanceKm} km · ~{q.etaMinutes} min
+        CHOOSE YOUR SERVICE — {distanceKm} km · {etaLabel}
       </AppText>
       <ServiceLevelPicker
         selected={serviceLevel}
         onSelect={setServiceLevel}
-        distanceKm={q.distanceKm}
+        distanceKm={distanceKm}
       />
 
       <Card style={{ gap: spacing.sm }}>
         <Row style={{ justifyContent: 'space-between' }}>
           <AppText variant="h3">Total</AppText>
           <AppText variant="h2" color={palette.gold}>
-            {formatZar(q.fareZar)}
+            {formatZar(fareZar)}
           </AppText>
         </Row>
         <AppText variant="caption" color={palette.textFaint}>
-          Paid securely via Stitch · cards & instant EFT · ZAR
+          {route?.live ? 'Live traffic-aware fare · ' : ''}Paid securely via
+          Stitch · cards & instant EFT · ZAR
         </AppText>
       </Card>
 
       <Button
-        title={`Request VIP Chauffeur · ${formatZar(q.fareZar)}`}
+        title={`Request VIP Chauffeur · ${formatZar(fareZar)}`}
         onPress={onRequest}
         loading={submitting}
       />
