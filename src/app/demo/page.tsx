@@ -20,6 +20,7 @@ import { BriefingsPanel, type Briefing } from "@/components/BriefingsPanel";
 import { CharlieDemo } from "@/components/CharlieDemo";
 import { ComposioStatus } from "@/components/ComposioStatus";
 import { Phase2Preview } from "@/components/Phase2Preview";
+import { CognitiveBrainPreview } from "@/components/CognitiveBrainPreview";
 
 const B = LAISA;
 
@@ -216,6 +217,8 @@ export default function LaisaDashboard() {
         <BriefingsPanel brand={B} briefings={BRIEFINGS} />
 
         <Phase2Preview brand={B} />
+
+        <CognitiveBrainPreview brand={B} />
       </div>
 
       {/* Chat dock */}
