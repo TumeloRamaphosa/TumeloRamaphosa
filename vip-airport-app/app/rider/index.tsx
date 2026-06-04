@@ -6,7 +6,9 @@ import { Brand } from '@/components/Brand';
 import { AppText, Badge, Button, Card, Divider, Row } from '@/components/ui';
 import { MapPreview } from '@/components/MapPreview';
 import { ServiceLevelPicker } from '@/components/ServiceLevelPicker';
+import { PlacesAutocomplete } from '@/components/PlacesAutocomplete';
 import { useApp } from '@/context/AppContext';
+import { useDeviceLocation } from '@/hooks/useDeviceLocation';
 import { palette, radius, spacing } from '@/constants/theme';
 import { DEMO_PICKUPS, OR_TAMBO_TERMINAL_A } from '@/constants/demo';
 import { formatZar } from '@/lib/geo';
@@ -15,14 +17,21 @@ import { createRidePayment, openCheckout } from '@/lib/payments';
 import type { Place, ServiceLevel } from '@/types';
 
 export default function BookRide() {
-  const { profile, quote, bookRide, markPaid, signOut } = useApp();
+  const { profile, quote, bookRide, markPaid } = useApp();
   const router = useRouter();
+  const location = useDeviceLocation();
 
   const [pickup, setPickup] = useState<Place>(DEMO_PICKUPS[0]);
   const [serviceLevel, setServiceLevel] = useState<ServiceLevel>('first_class');
   const [airline, setAirline] = useState('');
   const [flightNumber, setFlightNumber] = useState('');
   const [submitting, setSubmitting] = useState(false);
+
+  async function onUseMyLocation() {
+    const place = await location.request();
+    if (place) setPickup(place);
+    else if (location.error) Alert.alert('Location', location.error);
+  }
 
   const destination = OR_TAMBO_TERMINAL_A;
   const q = useMemo(
@@ -69,11 +78,18 @@ export default function BookRide() {
     <Screen>
       <Row style={{ justifyContent: 'space-between' }}>
         <Brand />
-        <Pressable onPress={signOut}>
-          <AppText variant="caption" color={palette.textMuted}>
-            Sign out
-          </AppText>
-        </Pressable>
+        <Row style={{ gap: spacing.lg }}>
+          <Pressable onPress={() => router.push('/rider/history')}>
+            <AppText variant="caption" color={palette.textMuted}>
+              Trips
+            </AppText>
+          </Pressable>
+          <Pressable onPress={() => router.push('/rider/profile')}>
+            <AppText variant="caption" color={palette.textMuted}>
+              Profile
+            </AppText>
+          </Pressable>
+        </Row>
       </Row>
 
       <AppText variant="display">
@@ -87,9 +103,21 @@ export default function BookRide() {
 
       {/* Pickup selection */}
       <Card>
-        <AppText variant="label" color={palette.textMuted}>
-          PICKUP
-        </AppText>
+        <Row style={{ justifyContent: 'space-between', marginBottom: spacing.xs }}>
+          <AppText variant="label" color={palette.textMuted}>
+            PICKUP
+          </AppText>
+          <Pressable onPress={onUseMyLocation}>
+            <AppText variant="caption" color={palette.gold}>
+              {location.loading ? 'Locating…' : '◎ Use my location'}
+            </AppText>
+          </Pressable>
+        </Row>
+        <PlacesAutocomplete
+          placeholder="Search any address…"
+          value={pickup}
+          onSelect={setPickup}
+        />
         <View style={styles.chipWrap}>
           {DEMO_PICKUPS.map((p) => {
             const active = p.label === pickup.label;
