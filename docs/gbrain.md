@@ -62,15 +62,37 @@ guide rates ongoing **search-mode** spend (model + corpus dependent):
 | balanced | $100/mo | $300/mo | $500/mo |
 | tokenmax | $200/mo | $600/mo | $1,000/mo |
 
-Enable when ready:
+**This project is set to use OpenAI** for embeddings. To turn the paid layer on,
+add `OPENAI_API_KEY` to the environment (web: the environment's secrets/env
+config; local: your shell or `.env`), then re-run setup:
 
 ```bash
-export ZEROENTROPY_API_KEY=ze-…   # default embedder + reranker
-# or: export OPENAI_API_KEY=sk-…  # text-embedding-3-large
-gbrain init --pglite               # picks up the key
-gbrain embed --stale               # build vectors
+export OPENAI_API_KEY=sk-…          # text-embedding-3-large (1536d)
+scripts/setup-gbrain.sh             # re-inits with OpenAI, embeds, sets mode
+# or manually:
+gbrain init --pglite --embedding-model openai:text-embedding-3-large
+gbrain embed --stale                # build vectors
 gbrain config set search.mode conservative
+gbrain think "open threads on Aviar?"
 ```
+
+### What "search mode" means
+
+`gbrain think` answers by running a small retrieval *agent*: it expands your
+question, pulls candidate pages, reranks them, and may do follow-up hops before
+writing a cited answer. **Search mode is the budget dial for that agent** — how
+many queries/expansions/hops and how much context it's allowed to burn per
+question:
+
+- **conservative** — fewest hops, tightest context. Cheapest, fast, still cited.
+- **balanced** — more expansion and reranking depth → better recall, more spend.
+- **tokenmax** — maximum hops/context → highest recall, highest spend.
+
+The dollar figures in the table above are gbrain's published *monthly* estimates
+at steady use; actual cost scales with how often you call `think` and which chat
+model it uses (Haiku ≪ Sonnet ≪ Opus). The setup script defaults to
+**conservative** — change it anytime with `gbrain config set search.mode <mode>`.
+`query`/`search` (plain retrieval) ignore this dial and stay cheap.
 
 ## Day-to-day with the agent (MCP)
 
@@ -84,12 +106,30 @@ Recommended loop once keys are set (gbrain can install these as cron/daemon):
 - nightly: `gbrain dream` (maintenance/consolidation)
 - weekly: `gbrain doctor`
 
-## Skills (optional, ask first)
+## Skills (installed)
 
-gbrain ships ~43 markdown "skills" (signal-detector, brain-ops, conventions, …).
-They are **not** installed by default. To add them:
+The bundled gbrain skills are scaffolded into `skills/` and committed, so the
+agent gets them on every cold start. Each `skills/<slug>/SKILL.md` declares
+`triggers:` in its frontmatter; the agent matches your message against those and
+runs the matching skill's workflow. `CLAUDE.md` points the agent at
+`skills/_AGENT_README.md` (the routing contract) and at the brain.
+
+What this buys us — the skills turn the brain from a passive store into an
+operator. Highlights:
+- **ingest / media-ingest / voice-note-ingest / meeting-ingestion** — drop in raw
+  content (articles, transcripts, voice notes) and it's filed into the right
+  brain pages with exact-phrasing preservation.
+- **signal-detector** — capture salient facts from inbound messages automatically.
+- **brain-ops + conventions + _brain-filing-rules** — consistent citations,
+  backlinks, and where pages live, so the graph stays clean.
+- **briefing / reports / data-research / perplexity-research** — synthesized,
+  cited briefings and brain-augmented web research.
+- **concept-synthesis / strategic-reading / book-mirror** — turn reading into
+  structured, reusable knowledge.
+
+Update skills when gbrain ships a new version:
 
 ```bash
-gbrain skillpack list           # see options
-gbrain skillpack install --all  # or install <name> for one
+gbrain upgrade
+gbrain skillpack reference --all     # diff bundle vs our committed copies
 ```

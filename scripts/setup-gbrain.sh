@@ -31,9 +31,12 @@ if ! command -v gbrain >/dev/null 2>&1; then
 fi
 log "gbrain $(gbrain --version)"
 
-# 3) Initialise a local PGLite brain (no server). Embedding deferred unless a
-#    provider key is already in the environment.
-if [ -n "${ZEROENTROPY_API_KEY:-}${OPENAI_API_KEY:-}${VOYAGE_API_KEY:-}" ]; then
+# 3) Initialise a local PGLite brain (no server). We prefer OpenAI embeddings
+#    (chosen for this project); fall back to other providers, else defer (free).
+if [ -n "${OPENAI_API_KEY:-}" ]; then
+  log "OpenAI key found — embedding with text-embedding-3-large."
+  gbrain init --pglite --embedding-model openai:text-embedding-3-large || true
+elif [ -n "${ZEROENTROPY_API_KEY:-}${VOYAGE_API_KEY:-}" ]; then
   gbrain init --pglite || true
 else
   log "No embedding key set — initialising with embedding deferred (free)."
@@ -48,10 +51,18 @@ gbrain config set link_resolution.global_basename true || true
 log "Extracting wiki-link graph edges (no LLM)…"
 gbrain extract links --source db || true
 
-# 5) If an embedding key is present, embed the stale chunks for vector search.
+# 5) If an embedding key is present, embed the stale chunks for vector search
+#    and set the (lowest-cost) search mode for synthesis.
 if [ -n "${ZEROENTROPY_API_KEY:-}${OPENAI_API_KEY:-}${VOYAGE_API_KEY:-}" ]; then
   log "Embedding pages…"
   gbrain embed --stale || true
+  gbrain config set search.mode conservative || true
+fi
+
+# 6) Skills are committed in skills/. Re-scaffold any the bundle adds later.
+if [ -d "$REPO_ROOT/skills" ]; then
+  GBRAIN_SRC="$(dirname "$(readlink -f "$(command -v gbrain)")")/.."
+  ( cd "$GBRAIN_SRC" 2>/dev/null && gbrain skillpack scaffold --all --workspace "$REPO_ROOT" ) || true
 fi
 
 log "Health check:"
