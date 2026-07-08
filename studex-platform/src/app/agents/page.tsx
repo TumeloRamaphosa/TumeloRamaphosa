@@ -1,22 +1,27 @@
 import { AgentOrchestration } from '@/components/AgentOrchestration'
 import { GoalTracker } from '@/components/GoalTracker'
+import { SkillMarketplace } from '@/components/SkillMarketplace'
 
 export default function AgentsPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-12">
-          <h1 className="text-4xl font-bold text-white mb-2">StudEx Agent Orchestration</h1>
-          <p className="text-slate-300">Autonomous agent fleet managing LAISA clinic operations</p>
+    <main className="min-h-screen bg-white dark:bg-gray-950">
+      <div className="max-w-7xl mx-auto px-6 py-12">
+        <div className="mb-16">
+          <h1 className="text-5xl font-bold text-gray-900 dark:text-white mb-3">StudEx Agent Orchestration</h1>
+          <p className="text-xl text-gray-600 dark:text-gray-300">Autonomous agent fleet + Skill Marketplace for LAISA clinic operations</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
           <div className="lg:col-span-2">
             <AgentOrchestration />
           </div>
           <div className="lg:col-span-1">
             <GoalTracker />
           </div>
+        </div>
+
+        <div className="my-16">
+          <SkillMarketplace />
         </div>
 
         <div className="mt-12 p-8 rounded-lg border border-slate-600 bg-slate-800/50">
