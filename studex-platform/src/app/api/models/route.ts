@@ -9,6 +9,7 @@ interface ModelConfig {
 
 let modelConfig: ModelConfig = {
   ollamaUrl: 'http://localhost:11434',
+  blotatoKey: 'blt_y5mVD6oMJrgFb8UsfWN3T4GSYN2ZvCeGsVWWwdaf8Og=',
   connectivityMode: 'hybrid',
   selectedModels: [],
 };
