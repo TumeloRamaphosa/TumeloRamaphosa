@@ -48,6 +48,7 @@ export default function RootLayout({
                 <a href="/priorities" className="text-sm font-medium hover:text-blue-600">Priorities</a>
                 <a href="/models" className="text-sm font-medium hover:text-blue-600">Models</a>
                 <a href="/email" className="text-sm font-medium hover:text-blue-600">Email</a>
+                <a href="/integrations" className="text-sm font-medium hover:text-blue-600">Integrations</a>
                 <a href="/vm" className="text-sm font-medium hover:text-blue-600">VMs</a>
                 <a href="/settings" className="text-sm font-medium hover:text-blue-600">Settings</a>
               </div>
