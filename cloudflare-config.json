@@ -1,0 +1,118 @@
+{
+  "zones": [
+    {
+      "name": "studexmeat.com",
+      "account_id": "YOUR_CLOUDFLARE_ACCOUNT_ID",
+      "dns_records": [
+        {
+          "type": "A",
+          "name": "studexmeat.com",
+          "content": "VERCEL_IP",
+          "ttl": 3600,
+          "proxied": true
+        },
+        {
+          "type": "CNAME",
+          "name": "www",
+          "content": "cname.vercel-dns.com",
+          "ttl": 3600,
+          "proxied": true
+        },
+        {
+          "type": "MX",
+          "name": "studexmeat.com",
+          "content": "mail.studexmeat.com",
+          "priority": 10,
+          "ttl": 3600
+        }
+      ],
+      "ssl": {
+        "mode": "full",
+        "certificate_authority": "letsencrypt"
+      },
+      "page_rules": [
+        {
+          "targets": ["*studexmeat.com/*"],
+          "actions": [
+            {"id": "cache_level", "value": "cache_everything"},
+            {"id": "browser_cache_ttl", "value": 14400},
+            {"id": "security_level", "value": "high"}
+          ]
+        }
+      ],
+      "firewall_rules": [
+        {
+          "expression": "(cf.bot_management.score < 30)",
+          "action": "block",
+          "description": "Block low-scoring bots"
+        }
+      ],
+      "analytics": {
+        "enabled": true,
+        "http2_push": true
+      }
+    },
+    {
+      "name": "studex-group.com",
+      "account_id": "YOUR_CLOUDFLARE_ACCOUNT_ID",
+      "dns_records": [
+        {
+          "type": "A",
+          "name": "studex-group.com",
+          "content": "VERCEL_IP",
+          "ttl": 3600,
+          "proxied": true
+        },
+        {
+          "type": "CNAME",
+          "name": "www",
+          "content": "cname.vercel-dns.com",
+          "ttl": 3600,
+          "proxied": true
+        }
+      ],
+      "ssl": {
+        "mode": "full",
+        "certificate_authority": "letsencrypt"
+      },
+      "page_rules": [
+        {
+          "targets": ["*studex-group.com/*"],
+          "actions": [
+            {"id": "cache_level", "value": "cache_everything"},
+            {"id": "browser_cache_ttl", "value": 14400}
+          ]
+        }
+      ]
+    }
+  ],
+  "global_settings": {
+    "image_optimization": true,
+    "minify": {
+      "css": true,
+      "javascript": true,
+      "html": true
+    },
+    "auto_minify": true,
+    "rocket_loader": true,
+    "email_routing": true,
+    "analytics_engine": true
+  },
+  "edge_functions": [
+    {
+      "name": "redirect-www",
+      "condition": "!request.url.pathname.startsWith('/cdn-cgi')",
+      "action": "redirect"
+    },
+    {
+      "name": "security-headers",
+      "headers": {
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "DENY",
+        "X-XSS-Protection": "1; mode=block",
+        "Referrer-Policy": "strict-origin-when-cross-origin",
+        "Permissions-Policy": "geolocation=(), microphone=(), camera=()"
+      }
+    }
+  ]
+}
