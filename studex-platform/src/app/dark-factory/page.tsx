@@ -7,6 +7,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { AGENTS } from "@/lib/agents";
+import { TaskStream } from "@/components/dark-factory/task-stream";
+import { AgentStatusGrid } from "@/components/dark-factory/agent-status-grid";
+import { MeetingRoomDetail } from "@/components/dark-factory/meeting-room-detail";
+import {
+  DEFAULT_ENVIRONMENTS,
+  DEFAULT_PRESENTATIONS,
+  DEFAULT_MEETING_ROOMS,
+  DEFAULT_TASKS,
+  type Environment,
+  type Presentation,
+  type MeetingRoom,
+} from "@/lib/dark-factory-config";
 import {
   ArrowLeft,
   Activity,
@@ -29,36 +41,12 @@ import {
   Settings,
 } from "lucide-react";
 
-interface Environment {
-  id: string;
-  name: string;
-  company: string;
-  status: "active" | "idle" | "maintenance";
-  agentsCount: number;
-  color: string;
-}
-
-interface MeetingRoom {
-  id: string;
-  name: string;
-  environmentId: string;
-  status: "scheduled" | "live" | "ended";
-  startTime: string;
-  objectives: string[];
-  attendees: string[];
-}
-
-interface Presentation {
-  agentName: string;
-  status: "scheduled" | "presenting" | "completed";
-  startTime: string;
-  duration: number;
-  slides: string[];
-}
 
 export default function DarkFactory() {
   const [view, setView] = useState<"boardroom" | "factory" | "environments" | "terminal">("boardroom");
   const [selectedEnvironment, setSelectedEnvironment] = useState<string | null>(null);
+  const [selectedMeetingRoom, setSelectedMeetingRoom] = useState<string | null>(null);
+  const [selectedAgent, setSelectedAgent] = useState<string | null>(null);
   const [expandTerminal, setExpandTerminal] = useState(false);
   const [terminalOutput, setTerminalOutput] = useState<string[]>([
     "$ dark-factory --init",
@@ -70,54 +58,10 @@ export default function DarkFactory() {
     "System ready for presentations.",
   ]);
 
-  const environments: Environment[] = [
-    { id: "env-001", name: "StudEx Meat", company: "studexmeat.com", status: "active", agentsCount: 5, color: "#ff2d78" },
-    { id: "env-002", name: "Global Markets", company: "studex-group.com", status: "active", agentsCount: 4, color: "#00f0ff" },
-    { id: "env-003", name: "Rahura Fitness", company: "rahura.app", status: "idle", agentsCount: 3, color: "#ff00ff" },
-    { id: "env-004", name: "Content Studio", company: "content.studex.dev", status: "active", agentsCount: 2, color: "#ffd700" },
-    { id: "env-005", name: "Email Operations", company: "mail.studex.cloud", status: "active", agentsCount: 2, color: "#00ff88" },
-    { id: "env-006", name: "Analytics Hub", company: "analytics.studex.dev", status: "maintenance", agentsCount: 2, color: "#ff7700" },
-    { id: "env-007", name: "Payment Gateway", company: "payments.studex.cloud", status: "active", agentsCount: 2, color: "#0088ff" },
-    { id: "env-008", name: "Inventory Mgmt", company: "inventory.studex.dev", status: "active", agentsCount: 2, color: "#ff00aa" },
-    { id: "env-009", name: "Customer Support", company: "support.studex.dev", status: "idle", agentsCount: 2, color: "#88ff00" },
-    { id: "env-010", name: "Mission Control", company: "war-room.studex.dev", status: "active", agentsCount: 3, color: "#00ffff" },
-  ];
-
-  const presentations: Presentation[] = [
-    { agentName: "Naledi", status: "presenting", startTime: "09:15", duration: 4, slides: ["Yesterday Metrics", "Today Plan", "Help Needed"] },
-    { agentName: "Charlie", status: "scheduled", startTime: "09:20", duration: 3, slides: ["Orders", "Fulfillment", "Blockers"] },
-    { agentName: "OpenCode", status: "scheduled", startTime: "09:25", duration: 5, slides: ["System Health", "Automations", "Integrations"] },
-  ];
-
-  const meetingRooms: MeetingRoom[] = [
-    {
-      id: "room-001",
-      name: "Daily Standup",
-      environmentId: "env-001",
-      status: "live",
-      startTime: "09:00 AM",
-      objectives: ["Review yesterday metrics", "Discuss today priorities", "Identify blockers"],
-      attendees: ["Naledi", "Charlie", "OpenCode", "Robusca", "Tumelo"],
-    },
-    {
-      id: "room-002",
-      name: "Global Markets Strategy",
-      environmentId: "env-002",
-      status: "scheduled",
-      startTime: "11:00 AM",
-      objectives: ["Q3 roadmap", "Partnership updates", "Revenue targets"],
-      attendees: ["Robusca", "Naledi", "OpenCode"],
-    },
-    {
-      id: "room-003",
-      name: "Content Planning",
-      environmentId: "env-003",
-      status: "scheduled",
-      startTime: "02:00 PM",
-      objectives: ["Weekly calendar", "Campaign alignment", "Asset review"],
-      attendees: ["Naledi", "Charlie"],
-    },
-  ];
+  const environmentList = DEFAULT_ENVIRONMENTS;
+  const presentationList = DEFAULT_PRESENTATIONS;
+  const meetingRoomList = DEFAULT_MEETING_ROOMS;
+  const taskList = DEFAULT_TASKS;
 
   const handleTerminalCommand = (command: string) => {
     setTerminalOutput((prev) => [...prev, `$ ${command}`]);
@@ -322,7 +266,7 @@ export default function DarkFactory() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    {presentations.map((pres, i) => (
+                    {presentationList.map((pres, i) => (
                       <div
                         key={i}
                         className={`p-3 rounded-lg border transition-all ${
@@ -428,7 +372,7 @@ export default function DarkFactory() {
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {meetingRooms.map((room) => (
+                    {meetingRoomList.map((room) => (
                       <div key={room.id} className="p-4 rounded-lg border border-white/10 hover:border-white/20 transition-all hover:bg-white/5">
                         <div className="flex items-start justify-between gap-2 mb-3">
                           <div>
@@ -555,7 +499,7 @@ export default function DarkFactory() {
                 </Button>
 
                 {(() => {
-                  const env = environments.find((e) => e.id === selectedEnvironment);
+                  const env = environmentList.find((e) => e.id === selectedEnvironment);
                   return env ? (
                     <>
                       <Card className="border-white/10 bg-gradient-to-r from-slate-800 to-slate-900">
@@ -596,7 +540,7 @@ export default function DarkFactory() {
                         </CardHeader>
                         <CardContent>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {meetingRooms
+                            {meetingRoomList
                               .filter((r) => r.environmentId === selectedEnvironment)
                               .map((room) => (
                                 <div key={room.id} className="p-4 rounded-lg border border-white/10 hover:border-white/20 transition-all">
@@ -630,7 +574,7 @@ export default function DarkFactory() {
                     10 Working Environments
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {environments.map((env) => (
+                    {environmentList.map((env) => (
                       <button
                         key={env.id}
                         onClick={() => setSelectedEnvironment(env.id)}
