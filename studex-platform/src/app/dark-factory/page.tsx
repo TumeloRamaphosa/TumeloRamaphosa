@@ -313,50 +313,7 @@ export default function DarkFactory() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-                    {/* Core Agents */}
-                    {AGENTS.map((agent) => (
-                      <div key={agent.id} className="group">
-                        <div className="p-3 rounded-lg border border-white/10 hover:border-white/20 transition-all hover:bg-white/5 cursor-pointer">
-                          <div
-                            className="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-white mb-2 group-hover:scale-110 transition-transform"
-                            style={{
-                              backgroundColor: agent.avatar_color + "40",
-                              borderColor: agent.avatar_color,
-                              borderWidth: 2,
-                            }}
-                          >
-                            {agent.name[0]}
-                          </div>
-                          <p className="font-mono text-xs font-bold text-white">{agent.name}</p>
-                          <p className="text-[10px] text-gray-500">{agent.role}</p>
-                          <div className="flex items-center gap-1 mt-2">
-                            <div
-                              className={`w-2 h-2 rounded-full ${
-                                agent.status === "online"
-                                  ? "bg-green-400"
-                                  : agent.status === "processing"
-                                  ? "bg-yellow-400"
-                                  : "bg-red-400"
-                              }`}
-                            />
-                            <span className="text-[10px] text-gray-500">{agent.status}</span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-
-                    {/* Placeholder for additional agents */}
-                    {[...Array(12 - AGENTS.length)].map((_, i) => (
-                      <div key={`placeholder-${i}`} className="p-3 rounded-lg border border-dashed border-white/20 flex items-center justify-center">
-                        <div className="text-center">
-                          <p className="text-2xl font-bold text-gray-600 mb-1">+</p>
-                          <p className="text-[10px] text-gray-600">Agent</p>
-                          <p className="text-[10px] text-gray-700">Connect</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                  <AgentStatusGrid agents={AGENTS} selectedAgent={selectedAgent} onAgentSelect={setSelectedAgent} />
                 </CardContent>
               </Card>
             </section>
@@ -453,28 +410,10 @@ export default function DarkFactory() {
                 <div className="mt-8">
                   <h3 className="text-sm font-mono font-bold text-white mb-4 flex items-center gap-2">
                     <Activity className="w-4 h-4 text-green-400" />
-                    Currently Executing (47 Tasks)
+                    Currently Executing ({taskList.length} Tasks)
                   </h3>
-                  <div className="space-y-2 max-h-64 overflow-y-auto">
-                    {[
-                      "Naledi: Generate Instagram content for Father's Day campaign",
-                      "Charlie: Process 28 Shopify orders (fulfillment in progress)",
-                      "OpenCode: Sync Notion database with new customer records",
-                      "Robusca: Prepare 10 AM board meeting agenda",
-                      "Naledi: Review Meta Ads performance (ROAS tracking)",
-                      "Charlie: Send WhatsApp tracking updates to 12 customers",
-                      "OpenCode: Monitor Cloudflare email delivery (mass send)",
-                      "Robusca: Coordinate content approvals from Tumelo",
-                      "Naledi: Schedule TikTok reels for 14:00 UTC",
-                      "Charlie: Check inventory levels for top 5 products",
-                    ].map((task, i) => (
-                      <div key={i} className="p-3 rounded border border-white/10 bg-white/3 hover:bg-white/5 transition-all">
-                        <div className="flex items-center gap-3">
-                          <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                          <p className="text-xs text-gray-300 font-mono">{task}</p>
-                        </div>
-                      </div>
-                    ))}
+                  <div className="max-h-96 overflow-y-auto">
+                    <TaskStream tasks={taskList} maxItems={15} />
                   </div>
                 </div>
               </CardContent>
