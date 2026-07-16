@@ -45,6 +45,7 @@ export default function RootLayout({
               </div>
               <div className="flex gap-6">
                 <a href="/dashboard" className="text-sm font-medium hover:text-blue-600">Dashboard</a>
+                <a href="/dark-factory" className="text-sm font-medium hover:text-amber-600">Dark Factory</a>
                 <a href="/priorities" className="text-sm font-medium hover:text-blue-600">Priorities</a>
                 <a href="/models" className="text-sm font-medium hover:text-blue-600">Models</a>
                 <a href="/email" className="text-sm font-medium hover:text-blue-600">Email</a>
