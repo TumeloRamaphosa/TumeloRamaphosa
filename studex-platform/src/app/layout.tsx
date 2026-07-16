@@ -35,7 +35,25 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="bg-cyber-black text-white antialiased">
+      <body className="bg-gray-50 text-gray-900 antialiased">
+        <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-16">
+              <div className="flex items-center gap-2">
+                <h1 className="text-2xl font-bold text-blue-600">StudEx</h1>
+                <p className="text-sm text-gray-600">Agent Platform</p>
+              </div>
+              <div className="flex gap-6">
+                <a href="/dashboard" className="text-sm font-medium hover:text-blue-600">Dashboard</a>
+                <a href="/priorities" className="text-sm font-medium hover:text-blue-600">Priorities</a>
+                <a href="/models" className="text-sm font-medium hover:text-blue-600">Models</a>
+                <a href="/email" className="text-sm font-medium hover:text-blue-600">Email</a>
+                <a href="/vm" className="text-sm font-medium hover:text-blue-600">VMs</a>
+                <a href="/settings" className="text-sm font-medium hover:text-blue-600">Settings</a>
+              </div>
+            </div>
+          </div>
+        </nav>
         {children}
       </body>
     </html>
