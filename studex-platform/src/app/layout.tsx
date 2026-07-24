@@ -47,6 +47,7 @@ export default function RootLayout({
                 <a href="/dashboard" className="text-sm font-medium hover:text-blue-600">Dashboard</a>
                 <a href="/cyber-world" className="text-sm font-medium hover:text-cyan-600">Cyber World</a>
                 <a href="/dark-factory" className="text-sm font-medium hover:text-amber-600">Dark Factory</a>
+                <a href="/discord" className="text-sm font-medium hover:text-blue-600">Discord</a>
                 <a href="/priorities" className="text-sm font-medium hover:text-blue-600">Priorities</a>
                 <a href="/models" className="text-sm font-medium hover:text-blue-600">Models</a>
                 <a href="/email" className="text-sm font-medium hover:text-blue-600">Email</a>
