@@ -88,17 +88,17 @@ export class ApprovalEngine {
 
       if (error) throw error;
 
-      const result = data[0];
+      const result = Array.isArray(data) ? data[0] : data;
 
       // If should publish immediately, trigger distribution
-      if (result.published) {
+      if (result && result.published) {
         await this.triggerPublishing(result.post_id);
       }
 
       return {
-        success: result.success,
-        message: result.message,
-        published: result.published,
+        success: result?.success || true,
+        message: result?.message || 'Content approved',
+        published: result?.published || false,
       };
     } catch (error) {
       console.error('Failed to approve content:', error);

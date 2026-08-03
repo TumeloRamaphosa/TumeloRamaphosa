@@ -44,6 +44,11 @@ export class AgentCoordinator {
     priority: number = 0,
     niche?: string,
   ): Promise<AgentTask> {
+    // Validate agent name
+    if (!this.AGENTS.includes(agentName)) {
+      throw new Error(`Invalid agent name: ${agentName}. Must be one of: ${this.AGENTS.join(', ')}`);
+    }
+
     try {
       const { data, error } = await supabase
         .from('agent_tasks')

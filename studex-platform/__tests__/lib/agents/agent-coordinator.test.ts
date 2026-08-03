@@ -1,36 +1,70 @@
 import { agentCoordinator } from '@/lib/agents/agent-coordinator';
 
 // Mock Supabase
+const mockAgentStatuses = [
+  { agent_name: 'charlie', status: 'idle', current_task_id: null, last_heartbeat: new Date().toISOString() },
+  { agent_name: 'robusca', status: 'idle', current_task_id: null, last_heartbeat: new Date().toISOString() },
+  { agent_name: 'naledi', status: 'idle', current_task_id: null, last_heartbeat: new Date().toISOString() },
+  { agent_name: 'competitor-scout', status: 'idle', current_task_id: null, last_heartbeat: new Date().toISOString() },
+  { agent_name: 'data-analyst', status: 'idle', current_task_id: null, last_heartbeat: new Date().toISOString() },
+  { agent_name: 'brand-voice', status: 'idle', current_task_id: null, last_heartbeat: new Date().toISOString() },
+];
+
 jest.mock('@supabase/supabase-js', () => ({
   createClient: jest.fn(() => ({
-    from: jest.fn(() => ({
-      insert: jest.fn().mockReturnValue({
+    from: jest.fn((table: string) => {
+      if (table === 'agent_coordination') {
+        return {
+          select: jest.fn().mockReturnValue({
+            eq: jest.fn().mockReturnThis(),
+            in: jest.fn().mockResolvedValue({
+              data: mockAgentStatuses,
+              error: null,
+            }),
+            single: jest.fn().mockResolvedValue({
+              data: { agent_name: 'test', status: 'idle', current_task_id: null, last_heartbeat: new Date().toISOString() },
+              error: null,
+            }),
+          }),
+          upsert: jest.fn().mockResolvedValue({ error: null }),
+        };
+      }
+      // Default for agent_tasks table
+      return {
+        insert: jest.fn().mockReturnValue({
+          select: jest.fn().mockReturnValue({
+            single: jest.fn().mockResolvedValue({
+              data: {
+                id: 'task-123',
+                agent_name: 'competitor-scout',
+                status: 'pending',
+              },
+              error: null,
+            }),
+          }),
+        }),
         select: jest.fn().mockReturnValue({
+          eq: jest.fn().mockReturnThis(),
+          in: jest.fn().mockResolvedValue({
+            data: [
+              { agent_name: 'competitor-scout', status: 'pending' },
+              { agent_name: 'data-analyst', status: 'running' },
+            ],
+            error: null,
+          }),
+          order: jest.fn().mockReturnThis(),
+          limit: jest.fn().mockReturnThis(),
           single: jest.fn().mockResolvedValue({
-            data: {
-              id: 'task-123',
-              agent_name: 'test-agent',
-              status: 'pending',
-            },
+            data: { id: 'task-123', status: 'pending' },
             error: null,
           }),
         }),
-      }),
-      select: jest.fn().mockReturnValue({
-        eq: jest.fn().mockReturnThis(),
-        in: jest.fn().mockReturnThis(),
-        order: jest.fn().mockReturnThis(),
-        limit: jest.fn().mockReturnThis(),
-        single: jest.fn().mockResolvedValue({
-          data: { id: 'task-123', status: 'pending' },
-          error: null,
+        update: jest.fn().mockReturnValue({
+          eq: jest.fn().mockResolvedValue({ error: null }),
         }),
-      }),
-      update: jest.fn().mockReturnValue({
-        eq: jest.fn().mockResolvedValue({ error: null }),
-      }),
-      upsert: jest.fn().mockResolvedValue({ error: null }),
-    })),
+        upsert: jest.fn().mockResolvedValue({ error: null }),
+      };
+    }),
   })),
 }));
 
@@ -50,7 +84,7 @@ describe('AgentCoordinator', () => {
       );
 
       expect(task).toBeDefined();
-      expect(task.agent_name).toBe('test-agent');
+      expect(task.agent_name).toBe('competitor-scout');
       expect(task.status).toBe('pending');
     });
 

@@ -8,6 +8,8 @@ jest.mock('@/lib/agents/agent-coordinator', () => ({
       brand_voice_task_id: 'voice-123',
     }),
     updateAgentStatus: jest.fn().mockResolvedValue(undefined),
+    updateTaskStatus: jest.fn().mockResolvedValue(undefined),
+    retryTask: jest.fn().mockResolvedValue(true),
     getQueueStatus: jest.fn().mockResolvedValue({
       total_pending: 5,
       total_running: 2,
@@ -27,7 +29,11 @@ jest.mock('@/lib/approval-engine', () => ({
       pending_count: 0,
       approved_today: 3,
       rejected_today: 0,
-      next_publish_time: new Date(),
+      next_publish_time: new Date(new Date().getTime() + 60 * 60 * 1000), // 1 hour from now
+      approval_window: {
+        open: true,
+        timeRemaining: 15 * 60 * 1000,
+      },
     }),
     getPendingApprovals: jest.fn().mockResolvedValue([]),
   },

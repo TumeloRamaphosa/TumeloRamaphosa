@@ -262,13 +262,13 @@ export class DailyMarketingCycleWorkflow {
       {
         phase: 'User Approval Window',
         start_time: approvalStart.toISOString(),
-        end_time: publishStart.toISOString(),
-        duration_minutes: 10,
+        end_time: new Date(publishStart.getTime() - 5 * 60 * 1000).toISOString(),
+        duration_minutes: 5,
       },
       {
         phase: 'Publishing',
-        start_time: publishStart.toISOString(),
-        end_time: new Date(publishStart.getTime() + 5 * 60 * 1000).toISOString(),
+        start_time: new Date(publishStart.getTime() - 5 * 60 * 1000).toISOString(),
+        end_time: publishStart.toISOString(),
         duration_minutes: 5,
       },
     ];

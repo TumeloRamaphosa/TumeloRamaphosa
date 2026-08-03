@@ -20,9 +20,16 @@ jest.mock('@supabase/supabase-js', () => ({
       }),
       select: jest.fn().mockReturnValue({
         eq: jest.fn().mockReturnThis(),
-        in: jest.fn().mockReturnThis(),
+        in: jest.fn().mockResolvedValue({
+          data: [
+            { agent_name: 'competitor-scout', status: 'pending' },
+            { agent_name: 'data-analyst', status: 'running' },
+          ],
+          error: null,
+        }),
         order: jest.fn().mockReturnThis(),
         limit: jest.fn().mockReturnThis(),
+        gte: jest.fn().mockReturnThis(),
         single: jest.fn().mockResolvedValue({
           data: { id: 'mock-id', status: 'pending' },
           error: null,
@@ -33,6 +40,30 @@ jest.mock('@supabase/supabase-js', () => ({
       }),
       upsert: jest.fn().mockResolvedValue({ error: null }),
     })),
+    rpc: jest.fn()
+      .mockImplementation((name: string) => {
+        if (name === 'submit_for_approval') {
+          return Promise.resolve({
+            data: [{ approval_id: 'app-123', status: 'pending', success: true }],
+            error: null,
+          });
+        }
+        if (name === 'get_pending_approvals') {
+          return Promise.resolve({
+            data: [
+              {
+                approval_id: 'app-1',
+                post_id: 'post-1',
+                status: 'pending',
+                influencer_name: 'test',
+                platform: 'youtube',
+              },
+            ],
+            error: null,
+          });
+        }
+        return Promise.resolve({ data: [], error: null });
+      }),
   })),
 }));
 
