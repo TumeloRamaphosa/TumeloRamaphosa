@@ -1,1 +1,3 @@
 requests>=2.31,<3
+# Only needed for Phase 3 HA dispatch. Safe to omit in --dry-run / --seed-only setups.
+websockets>=12,<14

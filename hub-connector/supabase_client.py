@@ -127,3 +127,18 @@ class SupabaseClient:
             timeout=self.timeout,
         )
         resp.raise_for_status()
+
+    def fetch_devices_by_ids(self, ids: list[str]) -> list[dict]:
+        """Return device rows for the given ids (needed for entity_id lookup)."""
+        if not ids:
+            return []
+        # PostgREST `in.(...)` syntax
+        joined = ",".join(ids)
+        resp = requests.get(
+            f"{self.rest}/devices",
+            params={"id": f"in.({joined})", "select": "*"},
+            headers=self._headers,
+            timeout=self.timeout,
+        )
+        resp.raise_for_status()
+        return resp.json()

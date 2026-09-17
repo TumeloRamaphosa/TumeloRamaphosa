@@ -82,12 +82,13 @@ def run_cycle(
     client.set_hub_status(cfg.hub_id, "online")
     print(f"  pushed {pushed} device(s) to Supabase")
 
-    # Phase 2: drain the command queue (stub executor for now).
+    # Phase 2/3: drain the command queue (real HA dispatch when configured, stub otherwise).
     from executor import consume_pending
 
-    ok, bad = consume_pending(client, cfg.hub_id)
+    ok, bad = consume_pending(client, cfg.hub_id, ha=cfg.ha_config())
     if ok or bad:
-        print(f"  commands: {ok} ok, {bad} failed")
+        dispatched_via = "HA" if cfg.ha_config() else "stub"
+        print(f"  commands: {ok} ok, {bad} failed (via {dispatched_via})")
 
 
 def main() -> int:

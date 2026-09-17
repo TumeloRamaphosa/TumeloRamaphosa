@@ -39,6 +39,15 @@ class Config:
             self.scan_interval = int(os.environ.get("SCAN_INTERVAL", "30"))
         except ValueError:
             self.scan_interval = 30
+        # Home Assistant (Phase 3a): both must be set to use real dispatch.
+        self.ha_url = os.environ.get("HA_URL", "").rstrip("/") or None
+        self.ha_token = os.environ.get("HA_TOKEN", "") or None
+
+    def ha_config(self) -> dict | None:
+        """Return {url, token} if HA is configured, else None (stub mode)."""
+        if self.ha_url and self.ha_token:
+            return {"url": self.ha_url, "token": self.ha_token}
+        return None
 
     def validate_for_push(self) -> list[str]:
         """Return a list of human-readable problems that block pushing."""
