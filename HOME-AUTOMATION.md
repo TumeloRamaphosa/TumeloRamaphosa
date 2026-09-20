@@ -146,3 +146,33 @@ relocate:
 git remote add home-auto https://github.com/TumeloRamaphosa/Home-Auto.git
 git push home-auto claude/home-automation-hub-9eCxW:main
 ```
+
+## For the next chapter — recommended dev toolkit
+
+When picking this up to build Phase 3b–5, install
+[`giovanisp/everything-claude-code`](https://github.com/giovanisp/everything-claude-code)
+as Claude Code plugins in your local `.claude/`:
+
+```bash
+npx skills add giovanisp/everything-claude-code
+```
+
+It's a hackathon-winning pack of 48 subagents, 183 workflow skills, 20+
+hooks, and 14 MCP configs. It doesn't ship inside the app — it makes the
+person building the next phase faster. The pieces that directly help this
+codebase:
+
+| Piece | Where it lands |
+|---|---|
+| **Security-review skill** | Before every push that touches the Supabase service-role key, HA long-lived token, or `.env`; catches secrets accidentally staged, weak RLS, and env-shape mistakes. |
+| **TDD skill** | The pattern we used in Phase 3a (mock HA WebSocket + mock PostgREST) generalises: Phase 3b (HomeClaw MCP), 3c (`pyatv`), and 4 (SmartThings) all follow "write the mock protocol, write the failing test, then the client". |
+| **Code-review skill** | Before merging any Phase 3+ PR — worth running once against the current diff before promoting the branch to `Home-Auto/main`. |
+| **Always-follow coding rules (TS + Python + Bash)** | This repo spans all three; the language rules keep the connector, the dashboard, and `deploy/setup.sh` consistent as more contributors join. |
+| **Pre-wired MCP configs (GitHub · Supabase · Vercel)** | Same tools we used through this session, ready in a new checkout without ceremony. |
+| **Automation hooks (20+)** | Pre-commit secret scans, auto-lint on save, `.env` guardrails — practical given we ship service-role keys via `.env`. |
+
+The 183 skills aren't all relevant; they're a library, not a checklist. The
+value is having them **available** the moment a phase needs one. Install
+lives in your Claude Code profile, not in the deployable app — so it never
+affects the Manus/Fly runtime.
+
