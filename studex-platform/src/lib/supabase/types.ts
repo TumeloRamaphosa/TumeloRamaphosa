@@ -102,3 +102,37 @@ export interface EnqueueCommandResponse {
   command?: Command;
   error?: string;
 }
+
+// ── AI Digest (Phase 4 add-on) ──────────────────────────────────────
+
+export type DigestSource = "github" | "hn" | "huggingface";
+
+export interface DigestItem {
+  id: string;
+  digest_date: string;
+  source: DigestSource;
+  rank: number;
+  title: string;
+  url: string;
+  author: string | null;
+  description: string | null;
+  score: number | null;
+  language: string | null;
+  metadata: Record<string, unknown>;
+  created_at: string;
+}
+
+export interface DigestResponse {
+  configured: boolean;
+  items: DigestItem[];
+  date: string | null;
+  error?: string;
+}
+
+export interface DigestRefreshResponse {
+  ok: boolean;
+  digest_date?: string;
+  inserted?: number;
+  errors?: string[];
+  error?: string;
+}

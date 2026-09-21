@@ -47,9 +47,10 @@ volume, …) to Home Assistant over its WebSocket API.
 | **1 · Discovery** | ✅ shipped | `hubs`/`devices` schema, connector scans ARP + USB, `/devices` page in Next.js polling `/api/devices` |
 | **2 · Control queue** | ✅ shipped | `commands` table, `/api/commands` (POST), Apple-Home dashboard with per-tile toggle, connector's stub executor drains `pending → sent → done` |
 | **3a · Real Home Assistant dispatch** | ✅ shipped | `ha_client.py` (async HA WebSocket, auth + `call_service`); action→service mapping (toggle/turn_on/play/pause/volume/mute/…); falls back to stub when HA env is unset |
+| **4a · Daily AI-tools digest** | ✅ shipped | `ai_digest` schema; `/api/digest/refresh` (Bearer-authed cron endpoint) pulls GitHub trending + Hacker News + Hugging Face; `/api/digest` (read); `/digest` page (Apple-Home theme, three columns); Vercel cron at 06:00 UTC |
 | 3b · HomeClaw for HomeKit | parked | MCP integration once a Mac mini + HomeClaw are set up |
 | 3c · AirPlay via pyatv | parked | Apple TV control; HomePod audio bridging within Apple's limits |
-| 4 · SmartThings + BLE + remote access | parked | Samsung + BLE proxies; Cloudflare Tunnel / Tailscale |
+| 4b · SmartThings + BLE + remote access | parked | Samsung + BLE proxies; Cloudflare Tunnel / Tailscale |
 | 5 · Conversational AI + memory | parked | Chat-to-your-home (Spynel / OpenClaw); memory layer inspired by TencentDB-Agent-Memory over Supabase pgvector |
 
 ## Quickstart
@@ -175,4 +176,57 @@ The 183 skills aren't all relevant; they're a library, not a checklist. The
 value is having them **available** the moment a phase needs one. Install
 lives in your Claude Code profile, not in the deployable app — so it never
 affects the Manus/Fly runtime.
+
+## Running on Bazzite (Lenovo laptop / Legion Go / MSI Claw)
+
+Full recipe: [`deploy/BAZZITE.md`](deploy/BAZZITE.md). Short version:
+
+```bash
+# Bazzite is immutable — use Homebrew or Distrobox, not dnf.
+brew install node python@3.12 gh
+npm install -g @anthropic-ai/claude-code
+distrobox create --name dev --image ubuntu:24.04
+distrobox enter dev
+bash deploy/setup.sh
+```
+
+For local + online agents on the same box: **Ollama** (offline models),
+**Open WebUI** in Podman (unified UI over Ollama + Anthropic/OpenAI keys),
+**Whisper.cpp** + **Piper** (offline speech I/O).
+
+## Daily AI-tools digest
+
+`/digest` is refreshed daily at 06:00 UTC by Vercel Cron (or any cron
+provider that can send `Authorization: Bearer $CRON_SECRET`). Pulls the top
+10 from three sources:
+
+- **GitHub** — `topic:ai` repos pushed in the last 7 days, ranked by stars.
+- **Hacker News** — top-stories JSON, filtered by AI keywords.
+- **Hugging Face** — trending models by `trendingScore`.
+
+Trigger manually:
+```bash
+curl -H "Authorization: Bearer $CRON_SECRET" \
+     https://<your-host>/api/digest/refresh
+```
+
+Each source is fetched independently — a partial failure is reported in
+the `errors` array and doesn't block the others.
+
+## Two AI tools worth knowing about (Sept 2026)
+
+- **[Jev by TypeSafe AI](https://www.marktechpost.com/2026/09/19/typesafe-ai-releases-jev/)** — a *decision-only* model
+  (yes/no + confidence, category pick, or numeric score) — no text
+  generation. ~200× faster and ~400× cheaper than an LLM on classification.
+  Natural fit here for the **command executor**: before dispatching, ask
+  Jev if an action is reversible / destructive / safe to auto-run. Also a
+  candidate for **routing** in Phase 5 (which model gets which task).
+- **[Meta Muse](https://techcrunch.com/2026/09/08/meta-debuts-muse-ai-agent-will-consumers-trust-it/)** — Meta's personal AI agent
+  (launched 8 Sep 2026) that opens a visible browser in a cloud VM, fills
+  forms, sends email, books things, connects to smart home. Not integrable
+  into this codebase (no public API surface), but useful **competitive
+  reference** for what "one assistant for your whole life" is aiming at.
+  Position: Muse is proprietary + Meta-hosted; this project is your own
+  local-first version of the same idea, with real device inventory rather
+  than a black-box browser.
 

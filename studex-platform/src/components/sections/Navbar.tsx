@@ -12,6 +12,7 @@ const navLinks = [
   { href: "#consultants", label: "AI Consultants" },
   { href: "#devhub", label: "Dev Hub" },
   { href: "/devices", label: "Devices" },
+  { href: "/digest", label: "Digest" },
   { href: "/brain", label: "Brain", highlight: true },
 ];
 

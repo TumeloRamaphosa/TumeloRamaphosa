@@ -14,5 +14,8 @@
   ],
   "rewrites": [
     { "source": "/api/:path*", "destination": "/api/:path*" }
+  ],
+  "crons": [
+    { "path": "/api/digest/refresh", "schedule": "0 6 * * *" }
   ]
 }
