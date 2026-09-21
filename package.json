@@ -1,0 +1,11 @@
+{
+  "name": "studex-workspace-index",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Canonical asset register for StudEx Group. Edit assets.json, then regenerate every derived view.",
+  "type": "module",
+  "scripts": {
+    "build:index": "node scripts/build-index.mjs",
+    "check:index": "node scripts/build-index.mjs && git diff --exit-code --stat WORKSPACE-INDEX.md index.html studex-platform/src/data/workspace-assets.json"
+  }
+}
