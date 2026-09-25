@@ -4,7 +4,7 @@
 
 Canonical register of StudEx Group operating assets, organised by business line.
 
-**Updated** 2026-09-21 · **Version** 1.0.0 · **40 assets** across **7 business lines**
+**Updated** 2026-09-25 · **Version** 1.0.0 · **40 assets** across **7 business lines**
 
 | Stage | Count | Meaning |
 | --- | --- | --- |
@@ -120,9 +120,18 @@ _The media library behind every campaign._
 
 ## Maintaining this file
 
+The Obsidian vault at `vault/` is the source of truth. Edit the note, not this file.
+
 ```bash
-# edit assets.json, then:
-npm run build:index
+# 1. edit the asset's note in vault/Assets/
+# 2. regenerate everything downstream:
+npm run sync
 ```
 
-`WORKSPACE-INDEX.md`, `index.html` and the platform's `/workspace` route all regenerate from `assets.json`. Editing any of them directly will be overwritten on the next build.
+```
+vault/  ->  assets.json  ->  WORKSPACE-INDEX.md
+                         ->  index.html
+                         ->  studex-platform /workspace route
+```
+
+`assets.json`, this file, `index.html` and the platform route are all generated. Editing any of them directly will be overwritten on the next sync.

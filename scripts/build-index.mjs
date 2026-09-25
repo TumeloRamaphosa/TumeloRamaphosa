@@ -84,10 +84,22 @@ function buildMarkdown() {
   }
 
   push("## Maintaining this file", "");
-  push("```bash", "# edit assets.json, then:", "npm run build:index", "```", "");
   push(
-    `\`WORKSPACE-INDEX.md\`, \`index.html\` and the platform's \`/workspace\` route all regenerate ` +
-      `from \`assets.json\`. Editing any of them directly will be overwritten on the next build.`,
+    "The Obsidian vault at `vault/` is the source of truth. Edit the note, not this file.",
+    ""
+  );
+  push("```bash", "# 1. edit the asset's note in vault/Assets/", "# 2. regenerate everything downstream:", "npm run sync", "```", "");
+  push(
+    "```",
+    "vault/  ->  assets.json  ->  WORKSPACE-INDEX.md",
+    "                         ->  index.html",
+    "                         ->  studex-platform /workspace route",
+    "```",
+    ""
+  );
+  push(
+    `\`assets.json\`, this file, \`index.html\` and the platform route are all generated. ` +
+      `Editing any of them directly will be overwritten on the next sync.`,
     ""
   );
 

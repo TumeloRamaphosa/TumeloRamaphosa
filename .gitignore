@@ -6,3 +6,10 @@ out/
 .env.*.local
 *.tsbuildinfo
 .DS_Store
+
+# Obsidian — per-machine UI state, not vault content.
+# Plugin and appearance settings under .obsidian/ SHOULD be committed so the
+# vault opens the same way for everyone; only the window layout and cache are local.
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
