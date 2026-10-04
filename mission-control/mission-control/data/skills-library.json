@@ -1,0 +1,114 @@
+{
+  "skills": [
+    {
+      "id": "skill_morning_brief",
+      "name": "Morning Brief",
+      "description": "Daily brief: overnight data + research → top 3 opportunities + today's jobs",
+      "content": "# Morning Brief\n\nRead vault/wiki/brand + latest vault/outputs/reports/data snapshot + new reports + completed hub jobs (vault/raw/inbox/done). Produce: yesterday's numbers, top 3 opportunities (each mapped to a skill), today's content jobs, risks. Save to vault/outputs/reports/briefs/. Never invent numbers — say 'no data yet'. Full skill: .claude/skills/morning-brief/SKILL.md",
+      "agentIds": ["chief-of-staff"],
+      "tags": ["daily", "orchestration"],
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "skill_weekly_review",
+      "name": "Weekly Review",
+      "description": "Plan the week (Mon) / score it vs store numbers (Fri)",
+      "content": "# Weekly Review\n\nPlan mode (Mon): theme, product focus, content calendar. Review mode (Fri): score vs targets (revenue, orders, AOV, conversion, ROAS, organic sessions), what worked, double-down list; then run vault-cleanup. Save to vault/outputs/reports/weekly/. Full: .claude/skills/weekly-review/SKILL.md",
+      "agentIds": ["chief-of-staff"],
+      "tags": ["weekly", "planning"],
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "skill_research_job",
+      "name": "Research Job (hub)",
+      "description": "Enqueue a deep-research job for the Mac mini Perplexity hub",
+      "content": "# Research Job\n\nTurn the question into one specific, source-able prompt and write a job file to vault/raw/inbox/JOB-<stamp>-<slug>.json (type perplexity_research). Result lands in vault/outputs/reports/. Full: .claude/skills/research-job/SKILL.md",
+      "agentIds": ["researcher", "chief-of-staff"],
+      "tags": ["research", "hub"],
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "skill_competitor_watch",
+      "name": "Competitor Watch",
+      "description": "Track SA meat/butchery competitors — prices, promos, new products",
+      "content": "# Competitor Watch\n\nRead competitor list from vault/wiki/domains/research-intel. Summarize latest vault/outputs/reports/competitors/, or enqueue refresh jobs. Compare vs our prices from the brand bible. Public info only. Full: .claude/skills/competitor-watch/SKILL.md",
+      "agentIds": ["researcher"],
+      "tags": ["research", "competitive"],
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "skill_seo_article",
+      "name": "SEO Article",
+      "description": "Research + draft a publish-ready SEO article/recipe/guide",
+      "content": "# SEO Article\n\nLoad brand voice. Draft SEO title, meta, H-structure, body, FAQ, internal links, JSON-LD schema. Flag unsourced claims. Save to vault/outputs/content/articles/. Full: .claude/skills/seo-article/SKILL.md",
+      "agentIds": ["marketer"],
+      "tags": ["content", "seo"],
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "skill_social_pipeline",
+      "name": "Social Pipeline",
+      "description": "A week of platform-native posts + captions + calendar",
+      "content": "# Social Pipeline\n\nLoad brand voice + week's plan. Per channel (IG/FB/TikTok/YT): caption, hashtags, CTA, format; 7-day calendar. Mark which become videos. Save to vault/outputs/content/social/. Full: .claude/skills/social-pipeline/SKILL.md",
+      "agentIds": ["social"],
+      "tags": ["social", "content"],
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "skill_video_pipeline",
+      "name": "Video Pipeline",
+      "description": "Short-form video package: hook, script, VO, subtitles, shot list",
+      "content": "# Video Pipeline\n\nMoneyPrinterTurbo-style package for Reels/TikTok/Shorts (9:16, 15-45s): hook, script, voiceover chunks w/ timing, shot list, on-screen text, BGM, caption. Save to vault/outputs/video/. Full: .claude/skills/video-pipeline/SKILL.md",
+      "agentIds": ["social"],
+      "tags": ["video", "short-form"],
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "skill_customer_followup",
+      "name": "Customer Follow-up",
+      "description": "Order/lead/win-back messages (email/WhatsApp/DM), POPIA-safe",
+      "content": "# Customer Follow-up\n\nLoad customers.md. Draft 2-3 variants per channel, one CTA each, subject lines + merge fields. POPIA: lawful basis + opt-out only. Save to vault/outputs/content/messages/. Never send — queue for approval. Full: .claude/skills/customer-followup/SKILL.md",
+      "agentIds": ["sales-cx"],
+      "tags": ["sales", "retention"],
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "skill_growth_report",
+      "name": "Growth Report",
+      "description": "Store data → KPIs + ranked opportunities",
+      "content": "# Growth Report\n\nRead vault/outputs/reports/data/ snapshots (+prior for deltas). KPI table, diagnose leaks/wins, ranked opportunity list (impact × ease) each mapped to a skill. Save to vault/outputs/reports/weekly/. Full: .claude/skills/growth-report/SKILL.md",
+      "agentIds": ["analyst"],
+      "tags": ["analytics", "growth"],
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "skill_kb_query",
+      "name": "KB Query",
+      "description": "Answer from the vault (RAG over wiki/ + outputs/), with citations",
+      "content": "# KB Query\n\nSearch vault/wiki + vault/outputs, synthesize a direct answer, cite exact files. 'Not in the vault yet' is valid. Full: .claude/skills/kb-query/SKILL.md",
+      "agentIds": ["analyst", "chief-of-staff"],
+      "tags": ["memory", "rag"],
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "skill_vault_cleanup",
+      "name": "Vault Cleanup",
+      "description": "Promote raw → wiki, dedupe, fix the master index",
+      "content": "# Vault Cleanup\n\nPromote durable raw notes to wiki (cleaned, sourced, linked), dedupe, update _master-index. Don't promote unsourced claims. Full: .claude/skills/vault-cleanup/SKILL.md",
+      "agentIds": ["chief-of-staff"],
+      "tags": ["memory", "maintenance"],
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    }
+  ]
+}

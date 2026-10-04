@@ -1,10 +1,15 @@
-# StudEx Agentic OS
+# StudEx Global Markets — Agentic OS
 
-> Claude **Cowork** OS for **www.studexmeat.com** — built on the 3-step Agentic OS blueprint:
-> **Architecture → Memory → Observability.**
+> The AI-company operating system for **StudEx Global Markets**.
+> **AI-Powered · Human-Focused · Globally Connected.**
 >
-> *Slot machine → system.* Random prompts and random results become an optimized,
-> observable operating system with memory that **grows the store**.
+> One owner gives a goal → a **Chief of Staff** agent delegates it across a specialist crew →
+> they work from a shared **brain** → nothing leaves without approval.
+> **Venture 1 = www.studexmeat.com** (the proving ground).
+
+> 📖 **Read the master plan first:** [`os/BLUEPRINT.md`](os/BLUEPRINT.md)
+> 🧠 **The brain agents read first:** [`vault/brain/company.md`](vault/brain/company.md)
+> 🖥️ **The dashboard/cockpit:** [`mission-control/`](mission-control/NOTICE-STUDEX.md)
 
 ---
 
@@ -13,9 +18,9 @@
 | | Who builds it | What it is |
 |---|---|---|
 | **Storefront layer** | *(other Claude, in progress)* | Shopify site + data plumbing: Facebook, Instagram, Google Ads, Google Analytics 4 |
-| **Operating layer — THIS REPO** | *this OS* | The Cowork system that **uses that data to grow the store**: skills, automations, memory, and the autonomous Mac mini hub |
+| **Operating layer — THIS REPO** | *this OS* | The AI-company that **uses that data to grow the ventures**: agent crew, skills, memory, the autonomous Mac mini hub, and the mission-control cockpit |
 
-The storefront produces **data**. This OS turns data into **decisions and content**.
+The storefront produces **data**. This OS turns data into **decisions and content** — run by a crew of agents under a Chief of Staff.
 
 ## The 3 layers
 
