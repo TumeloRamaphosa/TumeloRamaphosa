@@ -190,7 +190,10 @@ npm install
 
 # 9. NETBIRD MESH SETUP
 echo "🌐 Installing NetBird for mesh networking..."
-curl -L https://pkgs.netbird.io/install.sh | sudo bash
+tmpfile=$(mktemp)
+curl -L https://pkgs.netbird.io/install.sh -o "$tmpfile"
+sudo bash "$tmpfile"
+rm -f "$tmpfile"
 sudo dnf install -y netbird
 
 echo "NetBird installed. Next: sudo netbird up (will show setup URL)"
@@ -224,7 +227,8 @@ EOF
 
 # 11. SYSTEMD SERVICE (AUTO-START ON BOOT)
 echo "🔧 Creating systemd services..."
-cat > /tmp/studex-hermes.service << 'EOF'
+CURRENT_USER=$USER
+cat > /tmp/studex-hermes.service << EOF
 [Unit]
 Description=STUDEX Hermes Agent
 After=network.target netbird.service
@@ -232,10 +236,10 @@ Requires=netbird.service
 
 [Service]
 Type=simple
-User=$USER
-WorkingDirectory=/home/$USER/studex-agents
-EnvironmentFile=/home/$USER/studex-agents/.env
-ExecStart=/usr/bin/node /home/$USER/studex-agents/hermes-agent.js
+User=$CURRENT_USER
+WorkingDirectory=/home/$CURRENT_USER/studex-agents
+EnvironmentFile=/home/$CURRENT_USER/studex-agents/.env
+ExecStart=/usr/bin/node /home/$CURRENT_USER/studex-agents/hermes-agent.js
 Restart=always
 RestartSec=5
 StandardOutput=journal
@@ -255,11 +259,33 @@ if command -v ollama &> /dev/null; then
   echo "Ollama already installed"
 else
   curl -fsSL https://ollama.ai/install.sh | sh
-  # Pull lightweight Mistral 7B
-  ollama pull mistral:7b &
+  echo "Pulling Mistral 7B model (this may take 5-10 min)..."
+  # Wait for ollama service to be ready
+  sleep 2
+  ollama pull mistral:7b
 fi
 
-# 13. DOCKER COMPOSE (OPTIONAL - FOR ISOLATED AGENT CONTAINERS)
+# 13. DOCKERFILE FOR AGENTS
+echo "🐳 Creating Dockerfile for agents..."
+cat > Dockerfile << 'EOF'
+FROM node:18-slim
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install --production
+
+COPY hermes-agent.js .
+COPY chronos-agent.js .
+COPY denchclaw-agent.js .
+COPY .env .
+
+EXPOSE 3001 3002 3003
+
+CMD ["node", "hermes-agent.js"]
+EOF
+
+# 14. DOCKER COMPOSE (OPTIONAL - FOR ISOLATED AGENT CONTAINERS)
 echo "🐳 Creating Docker Compose config..."
 cat > docker-compose.yml << 'EOF'
 version: '3.8'
@@ -273,6 +299,7 @@ services:
     environment:
       - NODE_ENV=production
       - MESH_IP=hermes.studex.local
+      - PORT=3001
     restart: always
     networks:
       - studex-mesh
@@ -282,6 +309,10 @@ services:
     container_name: chronos-agent
     ports:
       - "3002:3002"
+    environment:
+      - NODE_ENV=production
+      - PORT=3002
+    command: node chronos-agent.js
     restart: always
     networks:
       - studex-mesh
