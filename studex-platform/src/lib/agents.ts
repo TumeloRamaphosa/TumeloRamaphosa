@@ -1,6 +1,7 @@
 import type { Agent } from "./supabase/types";
 
 export const AGENTS: Agent[] = [
+  // BUSINESS OPERATIONS AGENTS
   {
     id: "charlie-001",
     name: "Charlie",
@@ -33,6 +34,52 @@ export const AGENTS: Agent[] = [
     tasks_completed: 634,
     current_task: "Generating YouTube content brief for GTC 2026",
     avatar_color: "#ff00ff",
+  },
+
+  // STUDEX COMMODITY TRADING AGENTS
+  {
+    id: "hermes-004",
+    name: "Hermes",
+    codename: "HERMES-SALES",
+    role: "Sales & Negotiation",
+    status: "online",
+    last_active: new Date().toISOString(),
+    tasks_completed: 0,
+    current_task: "Outreach to Art Engineer, NTechLab",
+    avatar_color: "#00ff88",
+  },
+  {
+    id: "chronos-005",
+    name: "Chronos",
+    codename: "CHRONOS-MARKET",
+    role: "Strategy & Market Analysis",
+    status: "online",
+    last_active: new Date().toISOString(),
+    tasks_completed: 0,
+    current_task: "Monitoring cocoa, coffee, gold prices",
+    avatar_color: "#88ff00",
+  },
+  {
+    id: "openclaw-006",
+    name: "OpenClaw",
+    codename: "OPENCLAW-OPS",
+    role: "Operations & Logistics",
+    status: "online",
+    last_active: new Date().toISOString(),
+    tasks_completed: 0,
+    current_task: "Port monitoring, carrier booking",
+    avatar_color: "#ff8800",
+  },
+  {
+    id: "denchclaw-007",
+    name: "DenchClaw",
+    codename: "DENCHCLAW-CRM",
+    role: "Communications & CRM",
+    status: "online",
+    last_active: new Date().toISOString(),
+    tasks_completed: 0,
+    current_task: "Partner interactions, email sync",
+    avatar_color: "#00ffff",
   },
 ];
 
