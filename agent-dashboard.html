@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STUDEX Agent Control Center</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      margin-bottom: 30px;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 15px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pulse {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: #22c55e;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .agents-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .agent-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 15px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .agent-card:hover {
+      border-color: #64748b;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .agent-card.busy {
+      border-color: #f97316;
+      box-shadow: 0 0 15px rgba(249, 115, 22, 0.1);
+    }
+
+    .agent-card.online {
+      border-color: #22c55e;
+      box-shadow: 0 0 15px rgba(34, 197, 94, 0.1);
+    }
+
+    .agent-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 12px;
+    }
+
+    .agent-name {
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .agent-codename {
+      font-size: 11px;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .status-online {
+      background: rgba(34, 197, 94, 0.1);
+      color: #22c55e;
+    }
+
+    .status-busy {
+      background: rgba(249, 115, 22, 0.1);
+      color: #f97316;
+    }
+
+    .status-offline {
+      background: rgba(148, 163, 184, 0.1);
+      color: #94a3b8;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      animation: none;
+    }
+
+    .status-online .status-dot {
+      background: #22c55e;
+      animation: pulse 2s infinite;
+    }
+
+    .status-busy .status-dot {
+      background: #f97316;
+    }
+
+    .status-offline .status-dot {
+      background: #94a3b8;
+    }
+
+    .agent-role {
+      font-size: 12px;
+      color: #cbd5e1;
+      margin-bottom: 8px;
+    }
+
+    .current-task {
+      background: #0f172a;
+      border-left: 3px solid;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+
+    .task-title {
+      font-weight: 500;
+      margin-bottom: 5px;
+      color: #f1f5f9;
+    }
+
+    .progress-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 4px;
+      background: #334155;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #60a5fa, #3b82f6);
+      transition: width 0.3s ease;
+      border-radius: 2px;
+    }
+
+    .tasks-completed {
+      font-size: 12px;
+      color: #cbd5e1;
+      padding-top: 8px;
+      border-top: 1px solid #334155;
+      margin-top: 8px;
+    }
+
+    .activity-feed {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .activity-feed h2 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .activity-list {
+      space-y: 10px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .activity-item {
+      display: flex;
+      gap: 12px;
+      padding: 10px;
+      border-radius: 6px;
+      border-left: 3px solid;
+      font-size: 13px;
+      margin-bottom: 8px;
+      background: rgba(30, 41, 59, 0.5);
+    }
+
+    .activity-time {
+      color: #94a3b8;
+      font-size: 11px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .activity-text {
+      flex: 1;
+    }
+
+    .activity-email {
+      border-left-color: #3b82f6;
+    }
+
+    .activity-deal {
+      border-left-color: #22c55e;
+    }
+
+    .activity-analysis {
+      border-left-color: #f59e0b;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .stat-box {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 24px;
+      font-weight: 700;
+      color: #60a5fa;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #94a3b8;
+      text-transform: uppercase;
+    }
+
+    .charlie-color { border-left-color: #ff2d78 !important; }
+    .robusca-color { border-left-color: #00f0ff !important; }
+    .naledi-color { border-left-color: #ff00ff !important; }
+    .hermes-color { border-left-color: #00ff88 !important; }
+    .chronos-color { border-left-color: #88ff00 !important; }
+    .openclaw-color { border-left-color: #ff8800 !important; }
+    .denchclaw-color { border-left-color: #00ffff !important; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>
+        <span class="pulse"></span>
+        STUDEX AGENT CONTROL CENTER
+      </h1>
+      <p style="color: #94a3b8; font-size: 13px; margin-top: 5px;">Real-time distributed agent orchestration</p>
+    </header>
+
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="stat-number" id="total-online">7</div>
+        <div class="stat-label">Agents Online</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number" id="total-busy">3</div>
+        <div class="stat-label">Currently Busy</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number" id="tasks-completed">847</div>
+        <div class="stat-label">Tasks Completed</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number" id="revenue-generated">$284K</div>
+        <div class="stat-label">Revenue (Month 1)</div>
+      </div>
+    </div>
+
+    <div class="agents-grid" id="agents-grid"></div>
+
+    <div class="activity-feed">
+      <h2>
+        <span class="pulse" style="width: 6px; height: 6px;"></span>
+        Live Activity Feed
+      </h2>
+      <div class="activity-list" id="activity-feed"></div>
+    </div>
+  </div>
+
+  <script>
+    const agents = [
+      { id: 'charlie-001', name: 'Charlie', codename: 'CHARLIE-OPS', role: 'Client Operations & Voice AI', status: 'online', task: 'Processing studexmeat.com orders', progress: 65, tasks: 1247, color: 'charlie-color' },
+      { id: 'robusca-002', name: 'Robusca', codename: 'ROBUSCA-GLOBAL', role: 'Global Markets & Partnerships', status: 'online', task: 'Analyzing Tencent Cloud metrics', progress: 45, tasks: 892, color: 'robusca-color' },
+      { id: 'naledi-003', name: 'Naledi', codename: 'NALEDI-CREATIVE', role: 'Marketing & YouTube R&D', status: 'busy', task: 'Generating content brief for GTC 2026', progress: 82, tasks: 634, color: 'naledi-color' },
+      { id: 'hermes-004', name: 'Hermes', codename: 'HERMES-SALES', role: 'Sales & Negotiation', status: 'busy', task: 'Outreach to Art Engineer, NTechLab', progress: 55, tasks: 0, color: 'hermes-color' },
+      { id: 'chronos-005', name: 'Chronos', codename: 'CHRONOS-MARKET', role: 'Strategy & Market Analysis', status: 'online', task: 'Monitoring cocoa, coffee, gold prices', progress: 30, tasks: 0, color: 'chronos-color' },
+      { id: 'openclaw-006', name: 'OpenClaw', codename: 'OPENCLAW-OPS', role: 'Operations & Logistics', status: 'busy', task: 'Port monitoring, carrier booking', progress: 72, tasks: 0, color: 'openclaw-color' },
+      { id: 'denchclaw-007', name: 'DenchClaw', codename: 'DENCHCLAW-CRM', role: 'Communications & CRM', status: 'online', task: 'Partner interactions, email sync', progress: 40, tasks: 0, color: 'denchclaw-color' }
+    ];
+
+    const activities = [
+      { agent: 'Hermes', type: 'email', text: 'Sent partnership proposal to Art Engineer', time: '2 min ago' },
+      { agent: 'Chronos', type: 'analysis', text: 'Cocoa market surge detected: +2.3% in 24h', time: '5 min ago' },
+      { agent: 'OpenClaw', type: 'deal', text: 'Booked carrier for 100-ton shipment to Port of Tema', time: '8 min ago' },
+      { agent: 'Charlie', type: 'email', text: 'Order confirmation sent to customer #4521', time: '10 min ago' },
+      { agent: 'Naledi', type: 'analysis', text: 'YouTube content calendar updated with 12 new videos', time: '12 min ago' },
+    ];
+
+    function renderAgents() {
+      const grid = document.getElementById('agents-grid');
+      grid.innerHTML = agents.map(agent => `
+        <div class="agent-card ${agent.status === 'busy' ? 'busy' : 'online'} ${agent.color}">
+          <div class="agent-header">
+            <div>
+              <div class="agent-name">${agent.name}</div>
+              <div class="agent-codename">${agent.codename}</div>
+            </div>
+            <div class="status-badge status-${agent.status}">
+              <span class="status-dot"></span>
+              ${agent.status}
+            </div>
+          </div>
+
+          <div class="agent-role">${agent.role}</div>
+
+          <div class="current-task">
+            <div class="task-title">${agent.task}</div>
+            <div class="progress-container">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: ${agent.progress}%"></div>
+              </div>
+              <span>${agent.progress}%</span>
+            </div>
+          </div>
+
+          <div class="tasks-completed">
+            ✓ ${agent.tasks} tasks completed
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function updateActivityFeed() {
+      const feed = document.getElementById('activity-feed');
+      feed.innerHTML = activities.map((activity, idx) => `
+        <div class="activity-item activity-${activity.type}">
+          <div class="activity-time">${activity.time}</div>
+          <div class="activity-text"><strong>${activity.agent}:</strong> ${activity.text}</div>
+        </div>
+      `).join('');
+    }
+
+    function updateStats() {
+      const busy = agents.filter(a => a.status === 'busy').length;
+      document.getElementById('total-busy').textContent = busy;
+      document.getElementById('total-online').textContent = agents.length;
+
+      const totalTasks = agents.reduce((sum, a) => sum + a.tasks, 0);
+      document.getElementById('tasks-completed').textContent = totalTasks.toLocaleString();
+    }
+
+    function simulateUpdates() {
+      setInterval(() => {
+        // Simulate status changes
+        agents.forEach(agent => {
+          agent.progress = Math.min(100, agent.progress + Math.random() * 10);
+          if (agent.status === 'busy' && Math.random() > 0.7) {
+            agent.status = 'online';
+            agent.progress = 0;
+          } else if (agent.status === 'online' && Math.random() > 0.85) {
+            agent.status = 'busy';
+          }
+        });
+
+        // Add new activity sometimes
+        if (Math.random() > 0.7) {
+          const agentNames = agents.map(a => a.name);
+          const types = ['email', 'deal', 'analysis'];
+          const messages = {
+            email: `Sent message to partner`,
+            deal: `Negotiated deal worth $50K+`,
+            analysis: `Market analysis completed`
+          };
+          const type = types[Math.floor(Math.random() * types.length)];
+          const agent = agentNames[Math.floor(Math.random() * agentNames.length)];
+          activities.unshift({ agent, type, text: messages[type], time: 'now' });
+          activities.pop();
+        }
+
+        renderAgents();
+        updateActivityFeed();
+        updateStats();
+      }, 2000);
+    }
+
+    // Initial render
+    renderAgents();
+    updateActivityFeed();
+    updateStats();
+    simulateUpdates();
+  </script>
+</body>
+</html>
