@@ -85,9 +85,22 @@ jobs:
             flutter test test/studex_proxy_e2e_test.dart
           rm test/studex_proxy_e2e_test.dart
 
+      # Maven Central rate-limits shared runners (HTTP 429) while Gradle fetches
+      # Kotlin build deps. Retry with backoff, only on download errors.
       - name: Build release APK
         working-directory: jarvis
-        run: flutter build apk --release
+        run: |
+          for attempt in 1 2 3; do
+            if flutter build apk --release 2>&1 | tee build.log; [ "${PIPESTATUS[0]}" -eq 0 ]; then
+              exit 0
+            fi
+            if ! grep -qE "status code 429|Could not GET|Could not resolve|error while downloading" build.log; then
+              echo "Build failed for a reason other than a download error; not retrying."; exit 1
+            fi
+            echo "Download error on attempt $attempt; retrying in $((attempt * 90))s"
+            sleep $((attempt * 90))
+          done
+          exit 1
 
       - id: ver
         run: |
