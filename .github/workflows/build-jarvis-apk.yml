@@ -33,18 +33,14 @@ jobs:
           distribution: temurin
           java-version: "17"
 
-      - name: Set up Flutter (stable)
+      # Pinned to the Flutter release Jarvis was built with (.metadata revision
+      # 6b182d2c = 3.44.9); newer Flutter rejects its Gradle 9.1 / AGP 9.0.1.
+      - name: Set up Flutter 3.44.9
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+          flutter-version: "3.44.9"
           cache: true
-
-      # Current Flutter stable needs Gradle >= 9.3.1; Jarvis pins 9.1.0.
-      - name: Bump Gradle wrapper to 9.3.1
-        working-directory: jarvis
-        run: |
-          sed -i 's#gradle-[0-9.]*-all.zip#gradle-9.3.1-all.zip#' android/gradle/wrapper/gradle-wrapper.properties
-          grep distributionUrl android/gradle/wrapper/gradle-wrapper.properties
 
       - name: Install dependencies
         working-directory: jarvis
