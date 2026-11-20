@@ -12,7 +12,7 @@ on:
         default: ""
 
 permissions:
-  contents: read
+  contents: write  # publish the APK as a GitHub Release
 
 jobs:
   build:
@@ -66,3 +66,23 @@ jobs:
           path: jarvis/build/app/outputs/flutter-apk/app-release.apk
           if-no-files-found: error
           retention-days: 14
+
+      # A release asset is a plain public URL, so the phone installer can curl it
+      # (workflow artifacts need a GitHub login). Re-runs replace the asset.
+      - name: Publish APK as a GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          ver=$(sed -n 's/^version: *\([0-9.]*\).*/\1/p' jarvis/pubspec.yaml)
+          tag="jarvis-v${ver}"
+          cp jarvis/build/app/outputs/flutter-apk/app-release.apk jarvis-release.apk
+          sha256sum jarvis-release.apk | tee jarvis-release.apk.sha256
+          if gh release view "$tag" -R "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "$tag" jarvis-release.apk jarvis-release.apk.sha256 --clobber -R "$GITHUB_REPOSITORY"
+          else
+            gh release create "$tag" jarvis-release.apk jarvis-release.apk.sha256 -R "$GITHUB_REPOSITORY" \
+              --target "$TARGET_SHA" --title "Jarvis ${ver} (StudEx build)" \
+              --notes "Built from AbuZar-Ansarii/Jarvis (MIT) by .github/workflows/build-jarvis-apk.yml."
+          fi
+          echo "APK URL: https://github.com/${GITHUB_REPOSITORY}/releases/download/${tag}/jarvis-release.apk"
