@@ -33,14 +33,23 @@ jobs:
           distribution: temurin
           java-version: "17"
 
-      # Pinned to the Flutter release Jarvis was built with (.metadata revision
-      # 6b182d2c = 3.44.9); newer Flutter rejects its Gradle 9.1 / AGP 9.0.1.
-      - name: Set up Flutter 3.44.9
+      # Flutter 3.44.x (Jarvis's original toolchain) can no longer resolve its own
+      # Kotlin build deps from the Gradle plugin portal, so build with 3.50.1 and
+      # raise Jarvis's Gradle/AGP to the minimums that release requires.
+      - name: Set up Flutter 3.50.1
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: "3.44.9"
+          flutter-version: "3.50.1"
           cache: true
+
+      - name: Bump Gradle to 9.3.1 and AGP to 9.1.1
+        working-directory: jarvis/android
+        run: |
+          sed -i 's#gradle-[0-9.]*-all.zip#gradle-9.3.1-all.zip#' gradle/wrapper/gradle-wrapper.properties
+          sed -i 's#id("com.android.application") version "[0-9.]*"#id("com.android.application") version "9.1.1"#' settings.gradle.kts
+          grep distributionUrl gradle/wrapper/gradle-wrapper.properties
+          grep 'com.android.application' settings.gradle.kts
 
       - name: Install dependencies
         working-directory: jarvis
