@@ -1,12 +1,15 @@
 name: Build Jarvis APK
 
 on:
+  pull_request:
+    paths:
+      - ".github/workflows/build-jarvis-apk.yml"
   workflow_dispatch:
     inputs:
       jarvis_ref:
-        description: "Branch, tag or commit of AbuZar-Ansarii/Jarvis to build"
+        description: "Branch, tag or commit of AbuZar-Ansarii/Jarvis to build (empty = default branch)"
         required: false
-        default: "main"
+        default: ""
 
 permissions:
   contents: read
